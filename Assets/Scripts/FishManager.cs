@@ -35,7 +35,7 @@ public class FishManager : MonoBehaviour {
 				Mathf.Sin(angle) * c_fish_speed
 			);
 
-			GameObject fish = GameObject.Instantiate (m_Fish);
+			GameObject fish = GameObject.Instantiate(m_Fish);
 			fish.transform.position = pos;
 
 			FishData fishData = new FishData();
