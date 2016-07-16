@@ -114,6 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Scale: {x: 200, y: 0.8, z: 200}
   m_OceanMaterial: {fileID: 2100000, guid: 75ddabbb0ef12074da2e4a120280cec6, type: 2}
+  m_TerrainMask: {fileID: -2116494618, guid: f94a4bc2b347c4e3f9feab8119d437c8, type: 3}
 --- !u!4 &26400758
 Transform:
   m_ObjectHideFlags: 0
