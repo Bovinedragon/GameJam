@@ -48,6 +48,9 @@ public class FishManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		foreach (FishData fish in m_fishList) {
+			if (fish.m_fish == null)
+				continue;
+			
 			fish.m_fish.transform.position += fish.m_velocity * Time.deltaTime;
 
 			if (fish.m_velocity.x < 0 && fish.m_fish.transform.position.x < -c_map_width / 2) {

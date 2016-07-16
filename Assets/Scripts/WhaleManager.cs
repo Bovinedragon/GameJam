@@ -28,7 +28,7 @@ public class WhaleManager : MonoBehaviour {
 		}
 	
 	}
-	
+		
 	// Update is called once per frame
 	void Update () {
 	
