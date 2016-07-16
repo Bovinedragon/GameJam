@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae53de2703a2e724e834cae0cddef502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Scale: {x: 200, y: 1, z: 200}
+  m_Scale: {x: 200, y: 0.8, z: 200}
   m_OceanMaterial: {fileID: 2100000, guid: 75ddabbb0ef12074da2e4a120280cec6, type: 2}
 --- !u!4 &26400758
 Transform:
@@ -1250,10 +1250,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1952761752}
-  m_LocalRotation: {x: -0.19611594, y: 0.8034932, z: -0.3832472, w: -0.41116768}
+  m_LocalRotation: {x: -0.2239539, y: 0.7685923, z: -0.48027, w: -0.358401}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 51, y: -125.799995, z: 0.0002}
+  m_LocalEulerAnglesHint: {x: 64, y: -129.9999, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
