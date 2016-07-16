@@ -47,6 +47,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\FishManager.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
+     <Compile Include="Assets\Scripts\OceanBuilder.cs" />
      <Compile Include="Assets\Scripts\OptionsMenu.cs" />
      <Compile Include="Assets\Scripts\TerrainBuilder.cs" />
      <None Include="Assets\Shaders\Ocean.shader" />
