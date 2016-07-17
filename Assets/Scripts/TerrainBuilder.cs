@@ -6,6 +6,7 @@ public class TerrainBuilder : MonoBehaviour
 	public ProceduralMaterial m_ProceduralMaterial;
     public Material m_TerrainMaterial;
 	public Vector3 m_TerrainSize = new Vector3 (10f, 10f, 10f);
+    public CWaterSimulation m_WaterSimulation;
 
 	private Vector3[] m_vertices;
 
@@ -85,6 +86,9 @@ public class TerrainBuilder : MonoBehaviour
 
 		// center terrain
 		this.transform.position = new Vector3(-m_TerrainSize.x * 0.5f, -m_TerrainSize.y * 0.5f, -m_TerrainSize.z * 0.5f);
+
+        if (m_WaterSimulation != null)
+            m_WaterSimulation.BuildHeightMask(heightTexture);
 	}
 
 	private IEnumerator CreateTerrain()

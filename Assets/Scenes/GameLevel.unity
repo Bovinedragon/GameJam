@@ -114,7 +114,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Scale: {x: 200, y: 0.8, z: 200}
   m_OceanMaterial: {fileID: 2100000, guid: 75ddabbb0ef12074da2e4a120280cec6, type: 2}
-  m_TerrainMask: {fileID: -2116494618, guid: f94a4bc2b347c4e3f9feab8119d437c8, type: 3}
 --- !u!4 &26400758
 Transform:
   m_ObjectHideFlags: 0
@@ -1330,6 +1329,7 @@ MonoBehaviour:
     type: 3}
   m_TerrainMaterial: {fileID: 2100000, guid: a2b1ab0546ea09b4183f841813954a52, type: 2}
   m_TerrainSize: {x: 200, y: 16, z: 200}
+  m_WaterSimulation: {fileID: 26400757}
 --- !u!4 &2123471582
 Transform:
   m_ObjectHideFlags: 0

@@ -26,9 +26,7 @@ public class CWaterSimulation : MonoBehaviour {
     // Settings
     public Vector3 m_Scale = Vector3.one;
     public Material m_OceanMaterial;
-    public ProceduralTexture m_TerrainMask;
-
-
+    
     protected uint m_nFrames;
 
     // Create wave kernel
@@ -215,7 +213,6 @@ public class CWaterSimulation : MonoBehaviour {
             m_prevHeights[i] = 0;
             m_verticalDerivatives[i] = 0;
             m_modifiers[i] = 0;
-            m_obstructions[i] = 1.0f;
         }
 
         m_nFrames = 0xFFFFFFFF;
@@ -271,6 +268,8 @@ public class CWaterSimulation : MonoBehaviour {
             newHeight *= denominator;
             newHeight += m_modifiers[i];
             newHeight *= m_obstructions[i];
+            //if (m_obstructions[i] < 1.0f)
+            //    newHeight = 10.0f;
 
             m_prevHeights[i] = m_heights[i];
             m_heights[i] = newHeight;
@@ -300,21 +299,19 @@ public class CWaterSimulation : MonoBehaviour {
 
 
     // Generate height mesh
-    private void BuildHeightMask()
+    public void BuildHeightMask(ProceduralTexture texture)
     {
-        if (m_TerrainMask == null)
-            return;
-
-        Color32[] pixels = m_TerrainMask.GetPixels32(0, 0, m_TerrainMask.width, m_TerrainMask.height);
+        Color32[] pixels = texture.GetPixels32(0, 0, texture.width, texture.height);
 
         int iDst = 0;
         for (int y = 0; y < c_height; y++)
         {
             for (int x = 0; x < c_width; x++)
             {
-                int iColor = (x * m_TerrainMask.width) / c_width +
-                    ((y * m_TerrainMask.height) / c_height) * m_TerrainMask.width;
-                m_obstructions[iDst] = (float)pixels[iColor].a < 212 ? 0 : 1.0f;
+                int iColor = (x * texture.width) / c_width +
+                    ((y * texture.height) / c_height) * texture.width;
+                m_obstructions[iDst] = pixels[iColor].r > 128 ? 0 : 1.0f;
+
                 iDst++;
             }
         }
@@ -384,14 +381,17 @@ public class CWaterSimulation : MonoBehaviour {
     {
         m_kernel = new float[c_kernelSize * c_kernelSize];
 
-        m_heights = new float[c_width * c_height];
-        m_prevHeights = new float[c_width * c_height];
-        m_verticalDerivatives = new float[c_width * c_height];
-        m_modifiers = new float[c_width * c_height];
-        m_obstructions = new float[c_width * c_height];
+        uint nVertices = c_width * c_height;
+        m_heights = new float[nVertices];
+        m_prevHeights = new float[nVertices];
+        m_verticalDerivatives = new float[nVertices];
+        m_modifiers = new float[nVertices];
+        m_obstructions = new float[nVertices];
+
+        for (uint i = 0; i < nVertices; i++)
+            m_obstructions[i] = 1.0f;
 
         BuildOceanMesh();
-        BuildHeightMask();
         InitializeKernel();
     }
 
