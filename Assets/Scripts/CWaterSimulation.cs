@@ -26,6 +26,9 @@ public class CWaterSimulation : MonoBehaviour {
     // Settings
     public Vector3 m_Scale = Vector3.one;
     public Material m_OceanMaterial;
+    public Camera m_Camera;
+    public BoxCollider m_InputCollider;
+    public Transform m_MouseTestObj;
     
     protected uint m_nFrames;
 
@@ -395,6 +398,25 @@ public class CWaterSimulation : MonoBehaviour {
         InitializeKernel();
     }
 
+    private bool m_mouseDown = false;
+    private void HandleInput()
+	{
+		if (m_mouseDown || Input.GetMouseButtonDown(0))
+		{
+			m_mouseDown = true;
+			Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+			if (m_InputCollider.Raycast(ray, out hit, 160.0F))
+			{
+				Vector3 pos = hit.point;
+				m_MouseTestObj.position = new Vector3(pos.x, 0f, pos.z);
+			}
+		}
+		if (Input.GetMouseButtonUp(0))
+		{
+			m_mouseDown = false;
+		}
+    }
 
     // Use this for initialization
     void Start()
@@ -404,6 +426,7 @@ public class CWaterSimulation : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		HandleInput();
         PropagateWater(0.01f);
 
         uint nVerts = c_width * c_height;
