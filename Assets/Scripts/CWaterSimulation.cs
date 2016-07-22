@@ -10,6 +10,8 @@ public class CWaterSimulation : MonoBehaviour {
     public const float c_alpha = 0.3f;
     public const float c_gravity = 9.81f;
 
+    public const float c_waveDecaySeconds = 5.0f;
+
     protected float[] m_kernel;
 
     // These are all c_width * c_height
@@ -217,8 +219,9 @@ public class CWaterSimulation : MonoBehaviour {
             m_prevHeights[i] = 0;
             m_verticalDerivatives[i] = 0;
             m_modifiers[i] = 0;
-            m_vectorField[i << 1] = 0;
-            m_vectorField[(i << 1) + 1] = 0;
+            m_vectorField[i * 3] = 0;
+            m_vectorField[i * 3 + 1] = 0;
+            m_vectorField[i * 3 + 2] = 0;
         }
     }
 
@@ -314,7 +317,15 @@ public class CWaterSimulation : MonoBehaviour {
         float deltaSqrRcp = 1.0f / (float)(deltaX * deltaX + deltaY * deltaY);
 
         float radSqr = (float)(_radius * _radius);
-        
+
+        // VF calc
+        float dXf = (float)deltaX;
+        float dYf = (float)deltaY;
+        {
+            float sqrRcp = Mathf.Sqrt(deltaSqrRcp);
+            dXf *= sqrRcp;
+            dYf *= sqrRcp;
+        }
 
         for (int i = yMin; i <= yMax; i++)
         {
@@ -332,10 +343,38 @@ public class CWaterSimulation : MonoBehaviour {
                 {
                     float Mag = 1.0f - (distSqr / radSqr);
                     m_modifiers[iCur] += Mag * _Magnitude;
+
+                    // Affect vector field - for now, we just assume anything within the wave has full magnitude
+                    float prevLen = m_vectorField[i * 3];
+                    float totalLenRcp = 1.0f / (prevLen + 1.0f);
+                    m_vectorField[i * 3 + 1] = (m_vectorField[i * 3 + 1] * prevLen + dXf) * totalLenRcp;
+                    m_vectorField[i * 3 + 2] = (m_vectorField[i * 3 + 2] * prevLen + dYf) * totalLenRcp;
+                    m_vectorField[i * 3] = 1.0f;
                 }
                 iCur++;
             }
         }
+    }
+
+
+    protected void AdvanceVectorField(float _Delta)
+    {
+        int nNodes = c_width * c_height * 3;
+        for (int i = 0; i < nNodes; i += 3)
+        {
+            if (m_vectorField[i] <= 0.0f)
+                continue;
+
+            m_vectorField[i] = Mathf.Max(m_vectorField[i] - _Delta, 0.0f);
+        }
+    }
+
+
+    public Vector2 SampleVectorField(int _x, int _y)
+    {
+        int iCur = ((_y * c_width) + _x) * 3;
+        float len = m_vectorField[iCur];
+        return new Vector2(m_vectorField[iCur + 1] * len, m_vectorField[iCur + 2] * len);
     }
 
 
@@ -428,7 +467,7 @@ public class CWaterSimulation : MonoBehaviour {
         m_verticalDerivatives = new float[nVertices];
         m_modifiers = new float[nVertices];
         m_obstructions = new float[nVertices];
-        m_vectorField = new float[nVertices * 2];
+        m_vectorField = new float[nVertices * 3];
 
         for (uint i = 0; i < nVertices; i++)
             m_obstructions[i] = 1.0f;
@@ -486,6 +525,7 @@ public class CWaterSimulation : MonoBehaviour {
 	void Update () {
 		HandleInput();
         PropagateWater(0.01f);
+        AdvanceVectorField(Time.deltaTime / c_waveDecaySeconds);
 
         uint nVerts = c_width * c_height;
         for (uint i = 0; i <  nVerts; i++)
