@@ -18,6 +18,7 @@ public class CWaterSimulation : MonoBehaviour {
     protected float[] m_verticalDerivatives;
     protected float[] m_modifiers;
     protected float[] m_obstructions;
+    protected float[] m_vectorField;
 
     // Visual representation
     private Mesh m_mesh;
@@ -28,10 +29,10 @@ public class CWaterSimulation : MonoBehaviour {
     public Material m_OceanMaterial;
     public Camera m_Camera;
     public BoxCollider m_InputCollider;
-    public Transform m_MouseTestObj;
-    
-    protected uint m_nFrames;
 
+    // Input
+    protected Vector2 m_prevMouse;
+    
     // Create wave kernel
     protected void InitializeKernel()
     {
@@ -216,9 +217,9 @@ public class CWaterSimulation : MonoBehaviour {
             m_prevHeights[i] = 0;
             m_verticalDerivatives[i] = 0;
             m_modifiers[i] = 0;
+            m_vectorField[i << 1] = 0;
+            m_vectorField[(i << 1) + 1] = 0;
         }
-
-        m_nFrames = 0xFFFFFFFF;
     }
 
 
@@ -282,19 +283,56 @@ public class CWaterSimulation : MonoBehaviour {
 
 
     // Helper
-    public void ApplyWave(int _x, int _y, int _radius)
+    public void ApplyWave(int _x0, int _y0, int _x1, int _y1, int _radius, float _Magnitude)
     {
-        int iMod = (_y - _radius) * c_width + _x - _radius;
-        float RadSq = (float)(_radius * _radius);
+        int xMin, xMax, yMin, yMax;
+        if (_x0 < _x1)
+        {
+            xMin = _x0 - _radius;
+            xMax = _x1 + _radius;
+        }
+        else
+        {
+            xMin = _x1 - _radius;
+            xMax = _x0 + _radius;
+        }
 
-        for (int i = -_radius; i <= _radius; i++)
+        if (_y0 < _y1)
+        {
+            yMin = _y0 - _radius;
+            yMax = _y1 + _radius;
+        }
+        else
+        {
+            yMin = _y1 - _radius;
+            yMax = _y0 + _radius;
+        }
+
+        int iMod = yMin * c_width + xMin;
+        int deltaX = _x1 - _x0;
+        int deltaY = _y1 - _y0;
+        float deltaSqrRcp = 1.0f / (float)(deltaX * deltaX + deltaY * deltaY);
+
+        float radSqr = (float)(_radius * _radius);
+        
+
+        for (int i = yMin; i <= yMax; i++)
         {
             int iCur = iMod;
             iMod += c_width;
-            for (int j = -_radius; j < _radius; j++)
+            for (int j = xMin; j <= xMax; j++)
             {
-                float Mag = 1.0f - Mathf.Min((float)(i * i + j * j) / RadSq, 1.0f);
-                m_modifiers[iCur] += Mag * 0.3f;
+                int locX = j - _x0;
+                int locY = i - _y0;
+                float proj = Mathf.Clamp01((locX * deltaX + locY * deltaY) * deltaSqrRcp);
+                float offsX = (deltaX * proj) - locX;
+                float offsY = (deltaY * proj) - locY;
+                float distSqr = (offsX * offsX + offsY * offsY);
+                if (distSqr < radSqr)
+                {
+                    float Mag = 1.0f - (distSqr / radSqr);
+                    m_modifiers[iCur] += Mag * _Magnitude;
+                }
                 iCur++;
             }
         }
@@ -341,7 +379,6 @@ public class CWaterSimulation : MonoBehaviour {
             for (int x = 0; x <= width; x++, i++)
             {
                 float tx = ((float)x / (float)c_width);
-                int heightIdx = (z * c_width) + x;
                 float ty = 0f;
                 float tz = ((float)z / (float)c_width);
                 m_vertices[i] = new Vector3(tx, ty, tz);
@@ -383,6 +420,7 @@ public class CWaterSimulation : MonoBehaviour {
     void Awake()
     {
         m_kernel = new float[c_kernelSize * c_kernelSize];
+        m_prevMouse = new Vector2(-1, -1);
 
         uint nVertices = c_width * c_height;
         m_heights = new float[nVertices];
@@ -390,6 +428,7 @@ public class CWaterSimulation : MonoBehaviour {
         m_verticalDerivatives = new float[nVertices];
         m_modifiers = new float[nVertices];
         m_obstructions = new float[nVertices];
+        m_vectorField = new float[nVertices * 2];
 
         for (uint i = 0; i < nVertices; i++)
             m_obstructions[i] = 1.0f;
@@ -397,25 +436,44 @@ public class CWaterSimulation : MonoBehaviour {
         BuildOceanMesh();
         InitializeKernel();
     }
-
-    private bool m_mouseDown = false;
+    
     private void HandleInput()
 	{
-		if (m_mouseDown || Input.GetMouseButtonDown(0))
-		{
-			m_mouseDown = true;
-			Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
-			RaycastHit hit;
-			if (m_InputCollider.Raycast(ray, out hit, 160.0F))
-			{
-				Vector3 pos = hit.point;
-				m_MouseTestObj.position = new Vector3(pos.x, 0f, pos.z);
-			}
-		}
-		if (Input.GetMouseButtonUp(0))
-		{
-			m_mouseDown = false;
-		}
+        if (Input.GetMouseButton(0))
+        {
+            Vector2 mousePos = m_prevMouse;
+            Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (m_InputCollider.Raycast(ray, out hit, 160.0f))
+            {
+                Vector3 pos = hit.point + m_Scale * 0.5f;
+                mousePos = new Vector2(pos.x * c_width / m_Scale.x, pos.z * c_height / m_Scale.z);
+            }
+
+            int prevX = (int)m_prevMouse.x;
+            int prevY = (int)m_prevMouse.y;
+            int curX = (int)mousePos.x;
+            int curY = (int)mousePos.y;
+            int radius = 5;
+            int maxX = c_width - radius;
+            int maxY = c_height - radius;
+
+            if (prevX != curX || prevY != curY)
+            {
+                if (prevX > radius && curX > radius && prevY > radius && curY > radius &&
+                    prevX <= maxX && curX <= maxX && prevY <= maxY && curY <= maxY &&
+                    (prevX != curX || prevY != curY))
+                {
+                    ApplyWave(prevX, prevY, curX, curY, radius, -0.04f);
+                }
+
+                m_prevMouse = mousePos;
+            }
+        }
+        else
+        {
+            m_prevMouse.x = m_prevMouse.y = -1;
+        }
     }
 
     // Use this for initialization
@@ -434,17 +492,6 @@ public class CWaterSimulation : MonoBehaviour {
         {
             m_vertices[i].y = m_heights[i];
         }
-
-
-        // Temp
-        if (m_nFrames > 30)
-        {
-            int xPos = Random.Range(7, 120);
-            int yPos = Random.Range(7, 120);
-            ApplyWave(xPos, yPos, 7);
-            m_nFrames = 0;
-        }
-        m_nFrames++;
 
         m_mesh.vertices = m_vertices;
         m_mesh.RecalculateNormals();
