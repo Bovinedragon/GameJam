@@ -39,9 +39,6 @@ public class CWaterSimulation : MonoBehaviour {
     // Input
     protected Vector2 m_prevMouse;
     
-	// Other 
-	public FishManager m_FishManager;
-
     // Create wave kernel
     protected void InitializeKernel()
     {
@@ -383,7 +380,7 @@ public class CWaterSimulation : MonoBehaviour {
         float len = m_vectorField[iCur];
         return new Vector2(m_vectorField[iCur + 1] * len, m_vectorField[iCur + 2] * len);
     }
-
+   
     public Vector2 SampleVectorFieldWorld(float _x, float _z)
     {
         int locX, locY;
@@ -394,8 +391,7 @@ public class CWaterSimulation : MonoBehaviour {
         float len = m_vectorField[iCur];
         return new Vector2(m_vectorField[iCur + 1] * len, m_vectorField[iCur + 2] * len);
     }
-
-
+    
     // Generate height mesh
     public void BuildHeightMask(ProceduralTexture texture)
     {
@@ -494,9 +490,6 @@ public class CWaterSimulation : MonoBehaviour {
 
         BuildOceanMesh();
         InitializeKernel();
-
-		if (m_FishManager != null)
-			m_FishManager.SetVectorField(m_vectorField, c_width, c_height);
     }
     
     private void HandleInput()
