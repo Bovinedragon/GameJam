@@ -6,7 +6,7 @@ public class FishManager : MonoBehaviour {
 
 	public GameObject m_Fish;
 
-	private const int c_num_fish = 75;
+	private const int c_num_fish = 1;
 	private const int c_fish_y = 1;
 	private const float c_fish_speed = 5.0f;
 
@@ -19,9 +19,14 @@ public class FishManager : MonoBehaviour {
 	};
 
 	private List<FishData> m_fishList = new List<FishData>();
+
 	private Color32[] m_terrainData;
 	private int m_terrainWidth;
 	private int m_terrainHeight;
+
+	private float[] m_vectorField;
+	private int m_vectorFieldWidth;
+	private int m_vectorFieldHeight;
 
 	// Use this for initialization
 	void Start () {
@@ -53,6 +58,12 @@ public class FishManager : MonoBehaviour {
 		m_terrainData = texture.GetPixels32(0, 0, texture.width, texture.height);
 		m_terrainWidth = texture.width;
 		m_terrainHeight = texture.height;
+	}
+
+	public void SetVectorField (float[] vectorField, int width, int height) {
+		m_vectorField = vectorField;
+		m_vectorFieldWidth = width;
+		m_vectorFieldHeight = height;
 	}
 
 	Vector3 Cruising (int fish) {
@@ -161,12 +172,34 @@ public class FishManager : MonoBehaviour {
 		return normal;
 	}
 
+	Vector2 SampleVectorField (float x, float y) {
+		int tx = (int)(((x - c_map_bounds.xMin) / c_map_bounds.width) * m_vectorFieldWidth);
+		int ty = (int)(((y - c_map_bounds.yMin) / c_map_bounds.height) * m_vectorFieldHeight);
+		tx = Mathf.Clamp(tx, 0, m_vectorFieldWidth - 1);
+		ty = Mathf.Clamp(ty, 0, m_vectorFieldHeight - 1);
+
+		float len = m_vectorField[tx + ty * m_vectorFieldWidth + 0];
+		float vx = m_vectorField[tx + ty * m_vectorFieldWidth + 1];
+		float vy = m_vectorField[tx + ty * m_vectorFieldWidth + 2];
+
+		return new Vector3(vx * len, 0.0f, vy * len);
+	}
+		
+	Vector3 FollowVectorField (int fish) {
+		if (m_vectorField == null)
+			return Vector3.zero;
+
+		Vector3 pos = m_fishList[fish].m_fish.transform.position;
+		return SampleVectorField(pos.x, pos.y);
+	}
+
 	void Flock () {
-		const float c_cruising_weight = 10.0f;
-		const float c_keep_distance_weight = 4.0f;
-		const float c_watch_heading_weight = 4.0f;
+		const float c_cruising_weight = 1.0f;
+		const float c_keep_distance_weight = 0.0f;
+		const float c_watch_heading_weight = 0.0f;
 		const float c_avoid_edge_weight = 50.0f;
 		const float c_avoid_terrain_weight = 50.0f;
+		const float c_follow_vector_field_weight = 10.0f;
 
 		for (int i = 0; i < m_fishList.Count; ++i) {
 			Vector3 newHeading = Vector3.zero;
@@ -175,6 +208,7 @@ public class FishManager : MonoBehaviour {
 			newHeading = newHeading + WatchHeading(i).normalized * c_watch_heading_weight;
 			newHeading = newHeading + AvoidEdge(i).normalized * c_avoid_edge_weight;
 			newHeading = newHeading + AvoidTerrain(i).normalized * c_avoid_terrain_weight;
+			newHeading = newHeading + FollowVectorField(i).normalized * c_follow_vector_field_weight;
 
 			m_fishList[i].m_velocity = newHeading.normalized * c_fish_speed;
 		}

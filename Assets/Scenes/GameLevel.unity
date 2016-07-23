@@ -117,6 +117,7 @@ MonoBehaviour:
   m_OceanMaterial: {fileID: 2100000, guid: 75ddabbb0ef12074da2e4a120280cec6, type: 2}
   m_Camera: {fileID: 1640343214}
   m_InputCollider: {fileID: 26400759}
+  m_FishManager: {fileID: 1319741812}
 --- !u!4 &26400758
 Transform:
   m_ObjectHideFlags: 0
