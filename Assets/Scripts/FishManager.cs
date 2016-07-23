@@ -5,12 +5,14 @@ using System.Collections.Generic;
 public class FishManager : MonoBehaviour {
 
 	public GameObject m_Fish;
+	public CWaterSimulation m_WaterSimulation;
+	public TerrainBuilder m_TerrainBuilder;
 
-	private const int c_num_fish = 75;
+	private const int c_num_fish = 80;
 	private const int c_fish_y = 1;
 	private const float c_fish_speed = 5.0f;
 
-	private Rect c_map_bounds = new Rect(-100.0f, -100.0f, 200.0f, 200.0f);
+	//private Rect c_map_bounds = new Rect(-100.0f, -100.0f, 200.0f, 200.0f);
 	private Rect c_fish_bounds = new Rect(-90.0f, -65.0f, 180.0f, 130.0f);
 
 	class FishData {
@@ -19,9 +21,6 @@ public class FishManager : MonoBehaviour {
 	};
 
 	private List<FishData> m_fishList = new List<FishData>();
-	private Color32[] m_terrainData;
-	private int m_terrainWidth;
-	private int m_terrainHeight;
 
 	// Use this for initialization
 	void Start () {
@@ -40,6 +39,7 @@ public class FishManager : MonoBehaviour {
 			);
 
 			GameObject fish = GameObject.Instantiate(m_Fish);
+			fish.transform.SetParent(transform);
 			fish.transform.position = pos;
 
 			FishData fishData = new FishData();
@@ -47,12 +47,6 @@ public class FishManager : MonoBehaviour {
 			fishData.m_velocity = vel;
 			m_fishList.Add(fishData);
 		}
-	}
-
-	public void SetHeightTexture (ProceduralTexture texture) {
-		m_terrainData = texture.GetPixels32(0, 0, texture.width, texture.height);
-		m_terrainWidth = texture.width;
-		m_terrainHeight = texture.height;
 	}
 
 	Vector3 Cruising (int fish) {
@@ -70,7 +64,7 @@ public class FishManager : MonoBehaviour {
 		Vector3 avoid = Vector3.zero;
 		float closestSqrMag = 999999.0f;
 		for (int i = 0; i < m_fishList.Count; ++i) {
-			if (i == fish)
+			if (i == fish || m_fishList[i].m_fish == null)
 				continue;
 			
 			Vector3 diff = pos - m_fishList[i].m_fish.transform.position;
@@ -96,7 +90,7 @@ public class FishManager : MonoBehaviour {
 
 		Vector3 heading = Vector3.zero;
 		for (int i = 0; i < m_fishList.Count; ++i) {
-			if (i == fish)
+			if (i == fish || m_fishList[i].m_fish == null)
 				continue;
 
 			Vector3 diff = pos - m_fishList[i].m_fish.transform.position;
@@ -130,29 +124,21 @@ public class FishManager : MonoBehaviour {
 		return avoid;
 	}
 
-	int SampleTerrainData (float x, float y) {
-		int tx = (int)(((x - c_map_bounds.xMin) / c_map_bounds.width) * m_terrainWidth);
-		int ty = (int)(((y - c_map_bounds.yMin) / c_map_bounds.height) * m_terrainHeight);
-		tx = Mathf.Clamp(tx, 0, m_terrainWidth - 1);
-		ty = Mathf.Clamp(ty, 0, m_terrainHeight - 1);
-		return m_terrainData[tx + ty * m_terrainHeight].r;
-	}
-
 	Vector3 AvoidTerrain (int fish) {
-		if (m_terrainData == null)
+		if (m_TerrainBuilder == null)
 			return Vector3.zero;
-		
+
 		Vector3 pos = m_fishList[fish].m_fish.transform.position;
 
-		int height = SampleTerrainData(pos.x, pos.z);
-		if (height < 128)
+		int height = m_TerrainBuilder.SampleHeightDataWorld(pos.x, pos.z);
+		if (height < 110)
 			return Vector3.zero;
 
 		float offset = 3.0f;
-		int r = SampleTerrainData(pos.x + offset, pos.z);
-		int l = SampleTerrainData(pos.x - offset, pos.z);
-		int u = SampleTerrainData(pos.x, pos.z + offset);
-		int d = SampleTerrainData(pos.x, pos.z - offset);
+		int r = m_TerrainBuilder.SampleHeightDataWorld(pos.x + offset, pos.z);
+		int l = m_TerrainBuilder.SampleHeightDataWorld(pos.x - offset, pos.z);
+		int u = m_TerrainBuilder.SampleHeightDataWorld(pos.x, pos.z + offset);
+		int d = m_TerrainBuilder.SampleHeightDataWorld(pos.x, pos.z - offset);
 		Vector3 vx = new Vector3(offset, r - l, 0.0f);
 		Vector3 vz = new Vector3(0.0f, u - d, offset);
 		Vector3 normal = Vector3.Cross(vz, vx);
@@ -160,21 +146,35 @@ public class FishManager : MonoBehaviour {
 
 		return normal;
 	}
+		
+	Vector3 FollowVectorField (int fish) {
+		if (m_WaterSimulation == null)
+			return Vector3.zero;
+
+		Vector3 pos = m_fishList[fish].m_fish.transform.position;
+		Vector2 vec = m_WaterSimulation.SampleVectorFieldWorld(pos.x, pos.z);
+		return new Vector3(vec.x, 0.0f, vec.y);;
+	}
 
 	void Flock () {
 		const float c_cruising_weight = 10.0f;
 		const float c_keep_distance_weight = 4.0f;
 		const float c_watch_heading_weight = 4.0f;
-		const float c_avoid_edge_weight = 50.0f;
-		const float c_avoid_terrain_weight = 50.0f;
+		const float c_avoid_edge_weight = 40.0f;
+		const float c_avoid_terrain_weight = 40.0f;
+		const float c_follow_vector_field_weight = 7.0f;
 
 		for (int i = 0; i < m_fishList.Count; ++i) {
+			if (m_fishList[i].m_fish == null)
+				continue;
+			
 			Vector3 newHeading = Vector3.zero;
 			newHeading = newHeading + Cruising(i).normalized * c_cruising_weight;
 			newHeading = newHeading + KeepDistance(i).normalized * c_keep_distance_weight;
 			newHeading = newHeading + WatchHeading(i).normalized * c_watch_heading_weight;
 			newHeading = newHeading + AvoidEdge(i).normalized * c_avoid_edge_weight;
 			newHeading = newHeading + AvoidTerrain(i).normalized * c_avoid_terrain_weight;
+			newHeading = newHeading + FollowVectorField(i).normalized * c_follow_vector_field_weight;
 
 			m_fishList[i].m_velocity = newHeading.normalized * c_fish_speed;
 		}
@@ -186,6 +186,7 @@ public class FishManager : MonoBehaviour {
 				continue;
 
 			fish.m_fish.transform.position += fish.m_velocity * Time.deltaTime;
+			fish.m_fish.transform.LookAt(fish.m_fish.transform.position - fish.m_velocity);
 		}
 	}
 

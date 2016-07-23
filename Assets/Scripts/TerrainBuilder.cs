@@ -7,15 +7,29 @@ public class TerrainBuilder : MonoBehaviour
     public Material m_TerrainMaterial;
 	public Vector3 m_TerrainSize = new Vector3 (10f, 10f, 10f);
     public CWaterSimulation m_WaterSimulation;
-	public FishManager m_FishManager;
 
 	private Vector3[] m_vertices;
+
+	private Color32[] m_heightData;
+	private int m_heightDataWidth;
+	private int m_heightDataHeight;
 
 	void Start()
 	{
 		StartCoroutine(CreateTerrainMesh());
 	}
-	
+
+	public int SampleHeightDataWorld (float x, float y) {
+		if (m_heightData == null)
+			return 0;
+
+		int tx = (int)(((x + m_TerrainSize.x / 2) / m_TerrainSize.x) * m_heightDataWidth);
+		int ty = (int)(((y + m_TerrainSize.z / 2) / m_TerrainSize.z) * m_heightDataHeight);
+		tx = Mathf.Clamp(tx, 0, m_heightDataWidth - 1);
+		ty = Mathf.Clamp(ty, 0, m_heightDataHeight - 1);
+		return m_heightData[tx + ty * m_heightDataHeight].r;
+	}
+
 	private IEnumerator CreateTerrainMesh()
 	{
 		m_ProceduralMaterial.SetProceduralFloat("$randomseed", Random.Range(1, 9999));
@@ -90,8 +104,10 @@ public class TerrainBuilder : MonoBehaviour
 
         if (m_WaterSimulation != null)
             m_WaterSimulation.BuildHeightMask(heightTexture);
-		if (m_FishManager != null)
-			m_FishManager.SetHeightTexture(heightTexture);
+
+		m_heightData = heightData;
+		m_heightDataWidth = heightTexture.width;
+		m_heightDataHeight = heightTexture.height;
 	}
 
 	private IEnumerator CreateTerrain()

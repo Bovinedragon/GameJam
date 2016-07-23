@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: f94a4bc2b347c4e3f9feab8119d437c8
-timeCreated: 1468249456
+timeCreated: 1469304819
 licenseType: Pro
 SubstanceImporter:
   serializedVersion: 5
@@ -68,20 +68,6 @@ SubstanceImporter:
             offset: {x: 0, y: 0}
         data:
           first:
-            name: _DetailMask
-          second:
-            texture: {instanceID: 0}
-            scale: {x: 1, y: 1}
-            offset: {x: 0, y: 0}
-        data:
-          first:
-            name: _MetallicGlossMap
-          second:
-            texture: {instanceID: 0}
-            scale: {x: 1, y: 1}
-            offset: {x: 0, y: 0}
-        data:
-          first:
             name: _OcclusionMap
           second:
             texture: {instanceID: 0}
@@ -96,7 +82,21 @@ SubstanceImporter:
             offset: {x: 0, y: 0}
         data:
           first:
+            name: _DetailMask
+          second:
+            texture: {instanceID: 0}
+            scale: {x: 1, y: 1}
+            offset: {x: 0, y: 0}
+        data:
+          first:
             name: _DetailAlbedoMap
+          second:
+            texture: {instanceID: 0}
+            scale: {x: 1, y: 1}
+            offset: {x: 0, y: 0}
+        data:
+          first:
+            name: _MetallicGlossMap
           second:
             texture: {instanceID: 0}
             scale: {x: 1, y: 1}
@@ -116,6 +116,10 @@ SubstanceImporter:
           second: 0.5
         data:
           first:
+            name: _Parallax
+          second: 0.02
+        data:
+          first:
             name: _ZWrite
           second: 1
         data:
@@ -124,16 +128,8 @@ SubstanceImporter:
           second: 0.5
         data:
           first:
-            name: _Metallic
-          second: 0
-        data:
-          first:
             name: _BumpScale
           second: 1
-        data:
-          first:
-            name: _Parallax
-          second: 0.02
         data:
           first:
             name: _OcclusionStrength
@@ -150,11 +146,15 @@ SubstanceImporter:
           first:
             name: _Mode
           second: 0
+        data:
+          first:
+            name: _Metallic
+          second: 0
       colors:
         data:
           first:
             name: _EmissionColor
-          second: {r: 0, g: 0, b: 0, a: 1}
+          second: {r: 1, g: 1, b: 1, a: 1}
         data:
           first:
             name: _Color
@@ -180,15 +180,33 @@ SubstanceImporter:
       filterMode: 1
       aniso: 1
       wrapMode: 0
+    - name: TerrainBuilder_oceancolor
+      alphaSource: 0
+      filterMode: 1
+      aniso: 1
+      wrapMode: 0
+    - name: TerrainBuilder_output
+      alphaSource: 0
+      filterMode: 1
+      aniso: 1
+      wrapMode: 0
     textureAssignments:
     - shaderProp:
         name: _MainTex
       material: {instanceID: 0}
       baseUID: 3446970346
     - shaderProp:
+        name: _BumpMap
+      material: {instanceID: 0}
+      baseUID: 3470579290
+    - shaderProp:
         name: _ParallaxMap
       material: {instanceID: 0}
       baseUID: 3446968338
+    - shaderProp:
+        name: _EmissionMap
+      material: {instanceID: 0}
+      baseUID: 3471304232
     - shaderProp:
         name: _DetailMask
       material: {instanceID: 0}

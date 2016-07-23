@@ -23,6 +23,7 @@ public class WhaleManager : MonoBehaviour {
 			);
 
 			GameObject whale = GameObject.Instantiate(m_Whale);
+			whale.transform.SetParent(transform);
 			whale.transform.position = pos;
 			m_whaleList.Add(whale);
 		}

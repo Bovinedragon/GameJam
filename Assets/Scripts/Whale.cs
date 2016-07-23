@@ -14,7 +14,8 @@ public class Whale : MonoBehaviour {
 	}
 
 	void OnTriggerEnter (Collider other) {
-		Destroy(other.gameObject);
+		if (other.transform.parent != null)
+			Destroy(other.gameObject);
 	}
 		
 }
