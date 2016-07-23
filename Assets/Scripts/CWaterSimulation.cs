@@ -15,6 +15,7 @@ public class CWaterSimulation : MonoBehaviour {
 
     public float c_waveDecaySeconds = 5.0f;
     public float c_waveOffsetIntensity = 0.04f;
+    public int c_waveRadius = 5;
 
     protected float[] m_kernel;
 
@@ -520,7 +521,7 @@ public class CWaterSimulation : MonoBehaviour {
             int prevY = (int)m_prevMouse.y;
             int curX = (int)mousePos.x;
             int curY = (int)mousePos.y;
-            int radius = 5;
+            int radius = c_waveRadius;
             int maxX = c_width - radius;
             int maxY = c_height - radius;
 
