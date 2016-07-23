@@ -7,14 +7,14 @@ public class CWaterSimulation : MonoBehaviour {
     public const int c_width = 128;
     public const int c_height = 128;
 
-    public const int c_minObstruction = 104;
-    public const int c_maxObstruction = 128;
+    public int c_minObstruction = 104;
+    public int c_maxObstruction = 128;
 
     public const float c_alpha = 0.3f;
     public const float c_gravity = 9.81f;
 
-    public const float c_waveDecaySeconds = 5.0f;
-    public const float c_waveOffsetIntensity = 0.04f;
+    public float c_waveDecaySeconds = 5.0f;
+    public float c_waveOffsetIntensity = 0.04f;
 
     protected float[] m_kernel;
 
@@ -496,7 +496,6 @@ public class CWaterSimulation : MonoBehaviour {
 	{
         if (Input.GetMouseButtonDown(1))
         {
-            Vector2 mousePos = m_prevMouse;
             Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (m_InputCollider.Raycast(ray, out hit, 160.0f))
