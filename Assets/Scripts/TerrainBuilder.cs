@@ -7,6 +7,7 @@ public class TerrainBuilder : MonoBehaviour
     public Material m_TerrainMaterial;
 	public Vector3 m_TerrainSize = new Vector3 (10f, 10f, 10f);
     public CWaterSimulation m_WaterSimulation;
+	public FishManager m_FishManager;
 
 	private Vector3[] m_vertices;
 
@@ -89,6 +90,8 @@ public class TerrainBuilder : MonoBehaviour
 
         if (m_WaterSimulation != null)
             m_WaterSimulation.BuildHeightMask(heightTexture);
+		if (m_FishManager != null)
+			m_FishManager.SetHeightTexture(heightTexture);
 	}
 
 	private IEnumerator CreateTerrain()

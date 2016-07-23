@@ -1345,6 +1345,7 @@ MonoBehaviour:
   m_TerrainMaterial: {fileID: 2100000, guid: a2b1ab0546ea09b4183f841813954a52, type: 2}
   m_TerrainSize: {x: 200, y: 16, z: 200}
   m_WaterSimulation: {fileID: 26400757}
+  m_FishManager: {fileID: 1319741812}
 --- !u!4 &2123471582
 Transform:
   m_ObjectHideFlags: 0
