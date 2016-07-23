@@ -6,7 +6,7 @@ public class FishManager : MonoBehaviour {
 
 	public GameObject m_Fish;
 
-	private const int c_num_fish = 40;
+	private const int c_num_fish = 60;
 	private const int c_fish_y = 1;
 	private const int c_map_width = 180;
 	private const int c_map_height = 130;
@@ -44,26 +44,112 @@ public class FishManager : MonoBehaviour {
 			m_fishList.Add(fishData);
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		foreach (FishData fish in m_fishList) {
-			if (fish.m_fish == null)
+		
+	Vector3 Cruising (int fish) {
+		return m_fishList[fish].m_velocity;
+	}
+
+	Vector3 KeepDistance (int fish) {
+		const float visionDist = 20.0f;
+		const float avoidDist = 5.0f;
+		const float visionDistSqr = visionDist * visionDist;
+		const float avoidDistSqr = avoidDist * avoidDist;
+
+		Vector3 pos = m_fishList[fish].m_fish.transform.position;
+
+		Vector3 avoid = Vector3.zero;
+		float closestSqrMag = 999999.0f;
+		for (int i = 0; i < m_fishList.Count; ++i) {
+			if (i == fish)
 				continue;
 			
-			fish.m_fish.transform.position += fish.m_velocity * Time.deltaTime;
-
-			if (fish.m_velocity.x < 0 && fish.m_fish.transform.position.x < -c_map_width / 2) {
-				fish.m_velocity.x *= -1.0f;
-			} else if (fish.m_velocity.x > 0 && fish.m_fish.transform.position.x > c_map_width / 2) {
-				fish.m_velocity.x *= -1.0f;
-			}
-
-			if (fish.m_velocity.z < 0 && fish.m_fish.transform.position.z < -c_map_height / 2) {
-				fish.m_velocity.z *= -1.0f;
-			} else if (fish.m_velocity.z > 0 && fish.m_fish.transform.position.z > c_map_height / 2) {
-				fish.m_velocity.z *= -1.0f;
+			Vector3 diff = pos - m_fishList[i].m_fish.transform.position;
+			float sqrMag = diff.sqrMagnitude;
+			if (sqrMag < visionDistSqr && sqrMag < closestSqrMag) {
+				if (sqrMag < avoidDistSqr)
+					avoid = diff;
+				else
+					avoid = diff * -1.0f;
+				
+				closestSqrMag = sqrMag;
 			}
 		}
+
+		return avoid;
 	}
+
+	Vector3 WatchHeading (int fish) {
+		const float visionDist = 40.0f;
+		const float visionDistSqr = visionDist * visionDist;
+
+		Vector3 pos = m_fishList[fish].m_fish.transform.position;
+
+		Vector3 heading = Vector3.zero;
+		for (int i = 0; i < m_fishList.Count; ++i) {
+			if (i == fish)
+				continue;
+
+			Vector3 diff = pos - m_fishList[i].m_fish.transform.position;
+			float sqrMag = diff.sqrMagnitude;
+			if (sqrMag < visionDistSqr) {
+				heading += m_fishList[i].m_velocity.normalized;
+			}
+		}
+
+		return heading;
+	}
+
+	Vector3 AvoidEdge (int fish) {
+		Vector3 pos = m_fishList[fish].m_fish.transform.position;
+		Vector3 vel = m_fishList[fish].m_velocity;
+
+		Vector3 avoid = Vector3.zero;
+
+		if (vel.x < 0 && pos.x < -c_map_width / 2) {
+			avoid.x = 1.0f;
+		} else if (vel.x > 0 && pos.x > c_map_width / 2) {
+			avoid.x = -1.0f;
+		}
+
+		if (vel.z < 0 && pos.z < -c_map_height / 2) {
+			avoid.z = 1.0f;
+		} else if (vel.z > 0 && pos.z > c_map_height / 2) {
+			avoid.z = -1.0f;
+		}
+
+		return avoid;
+	}
+
+	void Flock () {
+		const float c_cruising_weight = 10.0f;
+		const float c_keep_distance_weight = 2.0f;
+		const float c_watch_heading_weight = 2.0f;
+		const float c_avoid_edge_weight = 100.0f;
+
+		for (int i = 0; i < m_fishList.Count; ++i) {
+			Vector3 newHeading = Vector3.zero;
+			newHeading = newHeading + Cruising(i).normalized * c_cruising_weight;
+			newHeading = newHeading + KeepDistance(i).normalized * c_keep_distance_weight;
+			newHeading = newHeading + WatchHeading(i).normalized * c_watch_heading_weight;
+			newHeading = newHeading + AvoidEdge(i).normalized * c_avoid_edge_weight;
+
+			m_fishList[i].m_velocity = newHeading.normalized * c_fish_speed;
+		}
+	}
+
+	void Step () {
+		foreach (var fish in m_fishList) {
+			if (fish.m_fish == null)
+				continue;
+
+			fish.m_fish.transform.position += fish.m_velocity * Time.deltaTime;
+		}
+	}
+
+	// Update is called once per frame
+	void Update () {
+		Flock();
+		Step();
+	}
+
 }
