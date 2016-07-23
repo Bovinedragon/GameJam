@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class FishManager : MonoBehaviour {
 
 	public GameObject m_Fish;
+	public CWaterSimulation m_WaterSimulation;
 
 	private const int c_num_fish = 80;
 	private const int c_fish_y = 1;
@@ -23,10 +24,6 @@ public class FishManager : MonoBehaviour {
 	private Color32[] m_terrainData;
 	private int m_terrainWidth;
 	private int m_terrainHeight;
-
-	private float[] m_vectorField;
-	private int m_vectorFieldWidth;
-	private int m_vectorFieldHeight;
 
 	// Use this for initialization
 	void Start () {
@@ -58,12 +55,6 @@ public class FishManager : MonoBehaviour {
 		m_terrainData = texture.GetPixels32(0, 0, texture.width, texture.height);
 		m_terrainWidth = texture.width;
 		m_terrainHeight = texture.height;
-	}
-
-	public void SetVectorField (float[] vectorField, int width, int height) {
-		m_vectorField = vectorField;
-		m_vectorFieldWidth = width;
-		m_vectorFieldHeight = height;
 	}
 
 	Vector3 Cruising (int fish) {
@@ -173,22 +164,22 @@ public class FishManager : MonoBehaviour {
 	}
 
 	Vector2 SampleVectorField (float x, float y) {
-		int tx = (int)(((x - c_map_bounds.xMin) / c_map_bounds.width) * m_vectorFieldWidth);
-		int ty = (int)(((y - c_map_bounds.yMin) / c_map_bounds.height) * m_vectorFieldHeight);
-		tx = Mathf.Clamp(tx, 0, m_vectorFieldWidth - 1);
-		ty = Mathf.Clamp(ty, 0, m_vectorFieldHeight - 1);
+		if (m_WaterSimulation == null)
+			return Vector3.zero;
 
-		float len = m_vectorField[tx + ty * m_vectorFieldWidth + 0];
-		float vx = m_vectorField[tx + ty * m_vectorFieldWidth + 1];
-		float vy = m_vectorField[tx + ty * m_vectorFieldWidth + 2];
+		int tx = (int)(((x - c_map_bounds.xMin) / c_map_bounds.width) * 128);
+		int ty = (int)(((y - c_map_bounds.yMin) / c_map_bounds.height) * 128);
+		tx = Mathf.Clamp(tx, 0, 128 - 1);
+		ty = Mathf.Clamp(ty, 0, 128 - 1);
 
-		return new Vector3(vx * len, 0.0f, vy * len);
+		Vector2 vec = m_WaterSimulation.SampleVectorField(tx, ty);
+		Vector3 vec3 = new Vector3(vec.x, 0.0f, vec.y);
+		print(vec3);
+
+		return vec3;
 	}
 		
 	Vector3 FollowVectorField (int fish) {
-		if (m_vectorField == null)
-			return Vector3.zero;
-
 		Vector3 pos = m_fishList[fish].m_fish.transform.position;
 		return SampleVectorField(pos.x, pos.y);
 	}
