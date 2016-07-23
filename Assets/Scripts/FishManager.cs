@@ -6,7 +6,7 @@ public class FishManager : MonoBehaviour {
 
 	public GameObject m_Fish;
 
-	private const int c_num_fish = 1;
+	private const int c_num_fish = 80;
 	private const int c_fish_y = 1;
 	private const float c_fish_speed = 5.0f;
 
