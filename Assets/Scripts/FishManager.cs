@@ -60,8 +60,8 @@ public class FishManager : MonoBehaviour {
 	}
 
 	Vector3 KeepDistance (int fish) {
-		const float visionDist = 5.0f;
-		const float avoidDist = 5.0f;
+		const float visionDist = 4.0f;
+		const float avoidDist = 4.0f;
 		const float visionDistSqr = visionDist * visionDist;
 		const float avoidDistSqr = avoidDist * avoidDist;
 
@@ -164,7 +164,7 @@ public class FishManager : MonoBehaviour {
 	void Flock () {
 		const float c_cruising_weight = 10.0f;
 		const float c_keep_distance_weight = 4.0f;
-		const float c_watch_heading_weight = 1.0f;
+		const float c_watch_heading_weight = 4.0f;
 		const float c_avoid_edge_weight = 50.0f;
 		const float c_avoid_terrain_weight = 50.0f;
 
