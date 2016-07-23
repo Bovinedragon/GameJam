@@ -7,10 +7,14 @@ public class CWaterSimulation : MonoBehaviour {
     public const int c_width = 128;
     public const int c_height = 128;
 
+    public const int c_minObstruction = 104;
+    public const int c_maxObstruction = 128;
+
     public const float c_alpha = 0.3f;
     public const float c_gravity = 9.81f;
 
     public const float c_waveDecaySeconds = 5.0f;
+    public const float c_waveOffsetIntensity = 0.04f;
 
     protected float[] m_kernel;
 
@@ -350,9 +354,9 @@ public class CWaterSimulation : MonoBehaviour {
                     // Affect vector field - for now, we just assume anything within the wave has full magnitude
                     float prevLen = m_vectorField[i * 3];
                     float totalLenRcp = 1.0f / (prevLen + 1.0f);
-                    m_vectorField[i * 3 + 1] = (m_vectorField[i * 3 + 1] * prevLen + dXf) * totalLenRcp;
-                    m_vectorField[i * 3 + 2] = (m_vectorField[i * 3 + 2] * prevLen + dYf) * totalLenRcp;
-                    m_vectorField[i * 3] = 1.0f;
+                    m_vectorField[iCur * 3 + 1] = (m_vectorField[iCur * 3 + 1] * prevLen + dXf) * totalLenRcp;
+                    m_vectorField[iCur * 3 + 2] = (m_vectorField[iCur * 3 + 2] * prevLen + dYf) * totalLenRcp;
+                    m_vectorField[iCur * 3] = 1.0f;
                 }
                 iCur++;
             }
@@ -373,9 +377,20 @@ public class CWaterSimulation : MonoBehaviour {
     }
 
 
-    public Vector2 SampleVectorField(int _x, int _y)
+    public Vector2 SampleVectorFieldLocal(int _x, int _y)
     {
         int iCur = ((_y * c_width) + _x) * 3;
+        float len = m_vectorField[iCur];
+        return new Vector2(m_vectorField[iCur + 1] * len, m_vectorField[iCur + 2] * len);
+    }
+
+    public Vector2 SampleVectorFieldWorld(float _x, float _z)
+    {
+        int locX, locY;
+        locX = (int)((_x + m_Scale.x * 0.5f) * c_width / m_Scale.x);
+        locY = (int)((_z + m_Scale.z * 0.5f) * c_height / m_Scale.z);
+
+        int iCur = ((locY * c_width) + locX) * 3;
         float len = m_vectorField[iCur];
         return new Vector2(m_vectorField[iCur + 1] * len, m_vectorField[iCur + 2] * len);
     }
@@ -393,7 +408,9 @@ public class CWaterSimulation : MonoBehaviour {
             {
                 int iColor = (x * texture.width) / c_width +
                     ((y * texture.height) / c_height) * texture.width;
-                m_obstructions[iDst] = pixels[iColor].r > 128 ? 0 : 1.0f;
+
+                float heightFrac = (float)(pixels[iColor].r - c_minObstruction) / (float)(c_maxObstruction - c_minObstruction);
+                m_obstructions[iDst] = Mathf.Clamp01(1.0f - heightFrac);
 
                 iDst++;
             }
@@ -484,6 +501,18 @@ public class CWaterSimulation : MonoBehaviour {
     
     private void HandleInput()
 	{
+        if (Input.GetMouseButtonDown(1))
+        {
+            Vector2 mousePos = m_prevMouse;
+            Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (m_InputCollider.Raycast(ray, out hit, 160.0f))
+            {
+                Vector2 tmp = SampleVectorFieldWorld(hit.point.x, hit.point.z);
+                Debug.Log("Vector field at point " + hit.point.x + ", " + hit.point.z + " is " + tmp.x + ", " + tmp.y);
+            }
+        }
+
         if (Input.GetMouseButton(0))
         {
             Vector2 mousePos = m_prevMouse;
