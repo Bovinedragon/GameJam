@@ -977,7 +977,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3daca09f21822e41af19d39b53f6ec5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Fish: {fileID: 199644, guid: 57b76df4f5aeeed409746881a150fce2, type: 2}
+  m_Fish: {fileID: 100000, guid: d52a42d739c63554e89b13b6a524a4a6, type: 3}
 --- !u!4 &1319741813
 Transform:
   m_ObjectHideFlags: 0
@@ -1300,7 +1300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b26045de72380694ba6fefed8eb6d244, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Whale: {fileID: 103236, guid: bdd3021d1f107254ba10d8af68ab8441, type: 2}
+  m_Whale: {fileID: 100000, guid: abbea25e5cb595840b651d81ab34cf60, type: 3}
 --- !u!4 &2003776117
 Transform:
   m_ObjectHideFlags: 0
