@@ -113,11 +113,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae53de2703a2e724e834cae0cddef502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_kernel: []
+  m_heights: []
+  m_prevHeights: []
+  m_verticalDerivatives: []
+  m_modifiers: []
+  m_obstructions: []
+  m_vectorField: []
+  m_mesh: {fileID: 0}
+  m_vertices: []
   m_Scale: {x: 200, y: 0.8, z: 200}
   m_OceanMaterial: {fileID: 2100000, guid: 75ddabbb0ef12074da2e4a120280cec6, type: 2}
   m_Camera: {fileID: 1640343214}
   m_InputCollider: {fileID: 26400759}
-  m_FishManager: {fileID: 1319741812}
+  m_prevMouse: {x: 0, y: 0}
 --- !u!4 &26400758
 Transform:
   m_ObjectHideFlags: 0
@@ -978,6 +987,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Fish: {fileID: 100000, guid: d52a42d739c63554e89b13b6a524a4a6, type: 3}
+  m_WaterSimulation: {fileID: 26400757}
+  m_TerrainBuilder: {fileID: 2123471581}
+  c_map_bounds:
+    x: -100
+    y: -100
+    width: 200
+    height: 200
+  c_fish_bounds:
+    x: -90
+    y: -65
+    width: 180
+    height: 130
+  m_terrainData: []
+  m_terrainWidth: 0
+  m_terrainHeight: 0
 --- !u!4 &1319741813
 Transform:
   m_ObjectHideFlags: 0
@@ -1301,6 +1325,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Whale: {fileID: 100000, guid: abbea25e5cb595840b651d81ab34cf60, type: 3}
+  m_whaleList: []
 --- !u!4 &2003776117
 Transform:
   m_ObjectHideFlags: 0
@@ -1347,6 +1372,10 @@ MonoBehaviour:
   m_TerrainSize: {x: 200, y: 16, z: 200}
   m_WaterSimulation: {fileID: 26400757}
   m_FishManager: {fileID: 1319741812}
+  m_vertices: []
+  m_heightData: []
+  m_heightDataWidth: 0
+  m_heightDataHeight: 0
 --- !u!4 &2123471582
 Transform:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ public class FishManager : MonoBehaviour {
 
 	public GameObject m_Fish;
 	public CWaterSimulation m_WaterSimulation;
+	public TerrainBuilder m_TerrainBuilder;
 
 	private const int c_num_fish = 80;
 	private const int c_fish_y = 1;
@@ -20,10 +21,6 @@ public class FishManager : MonoBehaviour {
 	};
 
 	private List<FishData> m_fishList = new List<FishData>();
-
-	private Color32[] m_terrainData;
-	private int m_terrainWidth;
-	private int m_terrainHeight;
 
 	// Use this for initialization
 	void Start () {
@@ -49,12 +46,6 @@ public class FishManager : MonoBehaviour {
 			fishData.m_velocity = vel;
 			m_fishList.Add(fishData);
 		}
-	}
-
-	public void SetHeightTexture (ProceduralTexture texture) {
-		m_terrainData = texture.GetPixels32(0, 0, texture.width, texture.height);
-		m_terrainWidth = texture.width;
-		m_terrainHeight = texture.height;
 	}
 
 	Vector3 Cruising (int fish) {
@@ -132,29 +123,21 @@ public class FishManager : MonoBehaviour {
 		return avoid;
 	}
 
-	int SampleTerrainData (float x, float y) {
-		int tx = (int)(((x - c_map_bounds.xMin) / c_map_bounds.width) * m_terrainWidth);
-		int ty = (int)(((y - c_map_bounds.yMin) / c_map_bounds.height) * m_terrainHeight);
-		tx = Mathf.Clamp(tx, 0, m_terrainWidth - 1);
-		ty = Mathf.Clamp(ty, 0, m_terrainHeight - 1);
-		return m_terrainData[tx + ty * m_terrainHeight].r;
-	}
-
 	Vector3 AvoidTerrain (int fish) {
-		if (m_terrainData == null)
+		if (m_TerrainBuilder == null)
 			return Vector3.zero;
-		
+
 		Vector3 pos = m_fishList[fish].m_fish.transform.position;
 
-		int height = SampleTerrainData(pos.x, pos.z);
+		int height = m_TerrainBuilder.SampleHeightDataWorld(pos.x, pos.z);
 		if (height < 100)
 			return Vector3.zero;
 
 		float offset = 3.0f;
-		int r = SampleTerrainData(pos.x + offset, pos.z);
-		int l = SampleTerrainData(pos.x - offset, pos.z);
-		int u = SampleTerrainData(pos.x, pos.z + offset);
-		int d = SampleTerrainData(pos.x, pos.z - offset);
+		int r = m_TerrainBuilder.SampleHeightDataWorld(pos.x + offset, pos.z);
+		int l = m_TerrainBuilder.SampleHeightDataWorld(pos.x - offset, pos.z);
+		int u = m_TerrainBuilder.SampleHeightDataWorld(pos.x, pos.z + offset);
+		int d = m_TerrainBuilder.SampleHeightDataWorld(pos.x, pos.z - offset);
 		Vector3 vx = new Vector3(offset, r - l, 0.0f);
 		Vector3 vz = new Vector3(0.0f, u - d, offset);
 		Vector3 normal = Vector3.Cross(vz, vx);
