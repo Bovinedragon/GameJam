@@ -12,7 +12,7 @@ public class FishManager : MonoBehaviour {
 	private const int c_fish_y = 1;
 	private const float c_fish_speed = 5.0f;
 
-	private Rect c_map_bounds = new Rect(-100.0f, -100.0f, 200.0f, 200.0f);
+	//private Rect c_map_bounds = new Rect(-100.0f, -100.0f, 200.0f, 200.0f);
 	private Rect c_fish_bounds = new Rect(-90.0f, -65.0f, 180.0f, 130.0f);
 
 	class FishData {
@@ -130,7 +130,7 @@ public class FishManager : MonoBehaviour {
 		Vector3 pos = m_fishList[fish].m_fish.transform.position;
 
 		int height = m_TerrainBuilder.SampleHeightDataWorld(pos.x, pos.z);
-		if (height < 100)
+		if (height < 110)
 			return Vector3.zero;
 
 		float offset = 3.0f;
@@ -145,34 +145,23 @@ public class FishManager : MonoBehaviour {
 
 		return normal;
 	}
-
-	Vector2 SampleVectorField (float x, float y) {
+		
+	Vector3 FollowVectorField (int fish) {
 		if (m_WaterSimulation == null)
 			return Vector3.zero;
 
-		int tx = (int)(((x - c_map_bounds.xMin) / c_map_bounds.width) * 128);
-		int ty = (int)(((y - c_map_bounds.yMin) / c_map_bounds.height) * 128);
-		tx = Mathf.Clamp(tx, 0, 128 - 1);
-		ty = Mathf.Clamp(ty, 0, 128 - 1);
-
-		Vector2 vec = m_WaterSimulation.SampleVectorField(tx, ty);
-		Vector3 vec3 = new Vector3(vec.x, 0.0f, vec.y);
-
-		return vec3;
-	}
-		
-	Vector3 FollowVectorField (int fish) {
 		Vector3 pos = m_fishList[fish].m_fish.transform.position;
-		return SampleVectorField(pos.x, pos.y);
+		Vector2 vec = m_WaterSimulation.SampleVectorFieldWorld(pos.x, pos.z);
+		return new Vector3(vec.x, 0.0f, vec.y);;
 	}
 
 	void Flock () {
-		const float c_cruising_weight = 1.0f;
-		const float c_keep_distance_weight = 0.0f;
-		const float c_watch_heading_weight = 0.0f;
-		const float c_avoid_edge_weight = 50.0f;
-		const float c_avoid_terrain_weight = 50.0f;
-		const float c_follow_vector_field_weight = 10.0f;
+		const float c_cruising_weight = 10.0f;
+		const float c_keep_distance_weight = 4.0f;
+		const float c_watch_heading_weight = 4.0f;
+		const float c_avoid_edge_weight = 40.0f;
+		const float c_avoid_terrain_weight = 40.0f;
+		const float c_follow_vector_field_weight = 7.0f;
 
 		for (int i = 0; i < m_fishList.Count; ++i) {
 			Vector3 newHeading = Vector3.zero;
