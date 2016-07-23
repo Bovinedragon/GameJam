@@ -7,10 +7,10 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Ocean
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: 76ae9da3334d2460c894d1c273d79ca8, type: 3}
   m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
   m_LightmapFlags: 5
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap:
     RenderType: Transparent
   m_SavedProperties:
@@ -88,6 +88,41 @@ Material:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _NormalMapA
+        second:
+          m_Texture: {fileID: 188975762, guid: fa7fa312a7fa109478f4e384e106a69b, type: 3}
+          m_Scale: {x: 0, y: 0}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _NormalMapB
+        second:
+          m_Texture: {fileID: 188975762, guid: fa7fa312a7fa109478f4e384e106a69b, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _GradientTex
+        second:
+          m_Texture: {fileID: 843329821, guid: fa7fa312a7fa109478f4e384e106a69b, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _HeightMapA
+        second:
+          m_Texture: {fileID: 843329821, guid: fa7fa312a7fa109478f4e384e106a69b, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _HeightMapB
+        second:
+          m_Texture: {fileID: 843329821, guid: fa7fa312a7fa109478f4e384e106a69b, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
@@ -116,7 +151,7 @@ Material:
       data:
         first:
           name: _Glossiness
-        second: 0.516
+        second: 0.404
       data:
         first:
           name: _BumpScale
@@ -140,11 +175,95 @@ Material:
       data:
         first:
           name: _Metallic
-        second: 0.51
+        second: 0.512
       data:
         first:
           name: _InvFade
         second: 1
+      data:
+        first:
+          name: _NormalScrollX
+        second: 2
+      data:
+        first:
+          name: _NormalScrollY
+        second: 0.2
+      data:
+        first:
+          name: _NormalScaleX
+        second: 1.08
+      data:
+        first:
+          name: _NormalScaleY
+        second: 6.1
+      data:
+        first:
+          name: _NormalAScrollX
+        second: 2
+      data:
+        first:
+          name: _NormalAScrollY
+        second: 0.03
+      data:
+        first:
+          name: _NormalAScaleX
+        second: 6
+      data:
+        first:
+          name: _NormalAScaleY
+        second: 6
+      data:
+        first:
+          name: _NormalBScrollX
+        second: -2.5
+      data:
+        first:
+          name: _NormalBScrollY
+        second: 0.07
+      data:
+        first:
+          name: _NormalBScaleX
+        second: 5
+      data:
+        first:
+          name: _NormalBScaleY
+        second: 5
+      data:
+        first:
+          name: _HeightAScrollX
+        second: 1
+      data:
+        first:
+          name: _HeightAScrollY
+        second: 0.05
+      data:
+        first:
+          name: _HeightAScaleX
+        second: 5
+      data:
+        first:
+          name: _HeightAScaleY
+        second: 6
+      data:
+        first:
+          name: _HeightBScrollX
+        second: 0.5
+      data:
+        first:
+          name: _HeightBScrollY
+        second: -0.1
+      data:
+        first:
+          name: _HeightBScaleX
+        second: 7
+      data:
+        first:
+          name: _HeightBScaleY
+        second: 8
+      data:
+        first:
+          name: _HeightIntensity
+        second: 0.77
     m_Colors:
       data:
         first:
@@ -153,7 +272,7 @@ Material:
       data:
         first:
           name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
+        second: {r: 0.3317474, g: 0.62138164, b: 0.7647059, a: 1}
       data:
         first:
           name: _SpecColor
