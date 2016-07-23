@@ -174,7 +174,6 @@ public class FishManager : MonoBehaviour {
 
 		Vector2 vec = m_WaterSimulation.SampleVectorField(tx, ty);
 		Vector3 vec3 = new Vector3(vec.x, 0.0f, vec.y);
-		print(vec3);
 
 		return vec3;
 	}
