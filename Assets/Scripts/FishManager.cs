@@ -39,6 +39,7 @@ public class FishManager : MonoBehaviour {
 			);
 
 			GameObject fish = GameObject.Instantiate(m_Fish);
+			fish.transform.SetParent(transform);
 			fish.transform.position = pos;
 
 			FishData fishData = new FishData();
@@ -63,7 +64,7 @@ public class FishManager : MonoBehaviour {
 		Vector3 avoid = Vector3.zero;
 		float closestSqrMag = 999999.0f;
 		for (int i = 0; i < m_fishList.Count; ++i) {
-			if (i == fish)
+			if (i == fish || m_fishList[i].m_fish == null)
 				continue;
 			
 			Vector3 diff = pos - m_fishList[i].m_fish.transform.position;
@@ -89,7 +90,7 @@ public class FishManager : MonoBehaviour {
 
 		Vector3 heading = Vector3.zero;
 		for (int i = 0; i < m_fishList.Count; ++i) {
-			if (i == fish)
+			if (i == fish || m_fishList[i].m_fish == null)
 				continue;
 
 			Vector3 diff = pos - m_fishList[i].m_fish.transform.position;
@@ -164,6 +165,9 @@ public class FishManager : MonoBehaviour {
 		const float c_follow_vector_field_weight = 7.0f;
 
 		for (int i = 0; i < m_fishList.Count; ++i) {
+			if (m_fishList[i].m_fish == null)
+				continue;
+			
 			Vector3 newHeading = Vector3.zero;
 			newHeading = newHeading + Cruising(i).normalized * c_cruising_weight;
 			newHeading = newHeading + KeepDistance(i).normalized * c_keep_distance_weight;
