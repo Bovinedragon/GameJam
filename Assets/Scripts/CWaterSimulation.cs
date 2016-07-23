@@ -398,6 +398,8 @@ public class CWaterSimulation : MonoBehaviour {
     {
         Color32[] pixels = texture.GetPixels32(0, 0, texture.width, texture.height);
 
+        float obstructionRcp = 1.0f / (c_maxObstruction - c_minObstruction);
+
         int iDst = 0;
         for (int y = 0; y < c_height; y++)
         {
@@ -406,7 +408,7 @@ public class CWaterSimulation : MonoBehaviour {
                 int iColor = (x * texture.width) / c_width +
                     ((y * texture.height) / c_height) * texture.width;
 
-                float heightFrac = (float)(pixels[iColor].r - c_minObstruction) / (float)(c_maxObstruction - c_minObstruction);
+                float heightFrac = (float)(pixels[iColor].r - c_minObstruction) * obstructionRcp;
                 m_obstructions[iDst] = Mathf.Clamp01(1.0f - heightFrac);
 
                 iDst++;

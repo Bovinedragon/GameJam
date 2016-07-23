@@ -7,6 +7,7 @@ public class TerrainBuilder : MonoBehaviour
     public Material m_TerrainMaterial;
 	public Vector3 m_TerrainSize = new Vector3 (10f, 10f, 10f);
     public CWaterSimulation m_WaterSimulation;
+    public int m_RandomSeed = 0;
 
 	private Vector3[] m_vertices;
 
@@ -15,8 +16,10 @@ public class TerrainBuilder : MonoBehaviour
 	private int m_heightDataHeight;
 
 	void Start()
-	{
-		StartCoroutine(CreateTerrainMesh());
+    {
+        if (m_RandomSeed == 0)
+            m_RandomSeed = Random.Range(1, 9999);
+        StartCoroutine(CreateTerrainMesh());
 	}
 
 	public int SampleHeightDataWorld (float x, float y) {
@@ -32,7 +35,7 @@ public class TerrainBuilder : MonoBehaviour
 
 	private IEnumerator CreateTerrainMesh()
 	{
-		m_ProceduralMaterial.SetProceduralFloat("$randomseed", Random.Range(1, 9999));
+		m_ProceduralMaterial.SetProceduralFloat("$randomseed", m_RandomSeed);
 		m_ProceduralMaterial.isReadable = true;
 		m_ProceduralMaterial.RebuildTexturesImmediately();
 
@@ -112,7 +115,7 @@ public class TerrainBuilder : MonoBehaviour
 
 	private IEnumerator CreateTerrain()
 	{
-		m_ProceduralMaterial.SetProceduralFloat("$randomseed", Random.Range (1, 9999));
+		m_ProceduralMaterial.SetProceduralFloat("$randomseed", m_RandomSeed);
 		m_ProceduralMaterial.isReadable = true;
 		m_ProceduralMaterial.RebuildTexturesImmediately();
 
