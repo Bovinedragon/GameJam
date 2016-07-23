@@ -530,7 +530,7 @@ public class CWaterSimulation : MonoBehaviour {
                     prevX <= maxX && curX <= maxX && prevY <= maxY && curY <= maxY &&
                     (prevX != curX || prevY != curY))
                 {
-                    ApplyWave(prevX, prevY, curX, curY, radius, -0.04f);
+                    ApplyWave(prevX, prevY, curX, curY, radius, -c_waveOffsetIntensity);
                 }
 
                 m_prevMouse = mousePos;
