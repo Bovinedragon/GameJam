@@ -48,7 +48,6 @@
      <Compile Include="Assets\Scripts\CWaterSimulation.cs" />
      <Compile Include="Assets\Scripts\FishManager.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
-     <Compile Include="Assets\Scripts\OceanBuilder.cs" />
      <Compile Include="Assets\Scripts\OptionsMenu.cs" />
      <Compile Include="Assets\Scripts\TerrainBuilder.cs" />
      <Compile Include="Assets\Scripts\Whale.cs" />
