@@ -156,7 +156,7 @@ public class FishManager : MonoBehaviour {
 		Vector3 pos = m_fishList[fish].m_fish.transform.position;
 
 		int height = SampleTerrainData(pos.x, pos.z);
-		if (height < 128)
+		if (height < 100)
 			return Vector3.zero;
 
 		float offset = 3.0f;
@@ -220,6 +220,7 @@ public class FishManager : MonoBehaviour {
 				continue;
 
 			fish.m_fish.transform.position += fish.m_velocity * Time.deltaTime;
+			fish.m_fish.transform.LookAt(fish.m_fish.transform.position - fish.m_velocity);
 		}
 	}
 
