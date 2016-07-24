@@ -22,6 +22,10 @@ public class TerrainBuilder : MonoBehaviour
         StartCoroutine(CreateTerrainMesh());
 	}
 
+	public bool HeightDataReady () {
+		return m_heightData != null;
+	}
+
 	public int SampleHeightDataWorld (float x, float y) {
 		if (m_heightData == null)
 			return 0;
