@@ -1307,6 +1307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Whale: {fileID: 139022, guid: 650a5940a45afa047aaddc2ac451ca3b, type: 2}
+  m_TerrainBuilder: {fileID: 2123471581}
 --- !u!4 &2003776117
 Transform:
   m_ObjectHideFlags: 0

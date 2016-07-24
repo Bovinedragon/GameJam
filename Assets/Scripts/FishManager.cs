@@ -176,7 +176,14 @@ public class FishManager : MonoBehaviour {
 			newHeading = newHeading + AvoidTerrain(i).normalized * c_avoid_terrain_weight;
 			newHeading = newHeading + FollowVectorField(i).normalized * c_follow_vector_field_weight;
 
-			m_fishList[i].m_velocity = newHeading.normalized * c_fish_speed;
+			newHeading = newHeading.normalized * c_fish_speed;
+
+			float maxAngle = Time.deltaTime * Mathf.PI * 2.0f;
+			float angle = Vector3.AngleBetween(m_fishList[i].m_velocity, newHeading);
+			if (angle > maxAngle)
+				newHeading = newHeading.normalized * c_fish_speed / 20;
+
+			m_fishList[i].m_velocity = Vector3.RotateTowards(m_fishList[i].m_velocity, newHeading, maxAngle, 999.0f);
 		}
 	}
 
