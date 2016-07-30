@@ -1187,9 +1187,9 @@ MonoBehaviour:
   m_chaseDetectionRange: 48
   m_chaseDetectionProjection: 0.7
   m_assaultRange: 16
-  m_harpoonTime: 2
-  m_vfTurnMagnitude: 1
-  m_vfPushMagnitude: 3
+  m_harpoonTime: 1.5
+  m_vfTurnMagnitude: 3
+  m_vfPushMagnitude: 2.5
 --- !u!4 &1376595389
 Transform:
   m_ObjectHideFlags: 0
