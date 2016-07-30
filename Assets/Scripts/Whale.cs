@@ -20,8 +20,14 @@ public class Whale : MonoBehaviour {
 	}
 
 	public void Heal () {
-		if (m_currentHealth < m_MaxHealth)
+		if (m_currentHealth < m_MaxHealth) {
 			m_currentHealth++;
+		
+			if (m_currentHealth == m_MaxHealth) {
+				WhaleManager manager = GetComponentInParent<WhaleManager>();
+				manager.Kill(this.gameObject);
+			}
+		}
 	}
 
 	// Use this for initialization
