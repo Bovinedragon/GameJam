@@ -1007,7 +1007,7 @@ GameObject:
   - 4: {fileID: 1376595389}
   - 114: {fileID: 1376595388}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: BoatManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1027,10 +1027,20 @@ MonoBehaviour:
   m_boatModel: {fileID: 100000, guid: c10d468f8b905f54e86ef21afee44950, type: 3}
   m_harpoonModel: {fileID: 100000, guid: 513e6b68ed54b1040a93655fe8f5368a, type: 3}
   m_waterSimulation: {fileID: 26400757}
+  m_whaleManager: {fileID: 2003776116}
   m_boatCount: 4
-  m_boatIdleSpeed: 3
+  m_boatIdleSpeed: 5
   m_boatIdleRange: 64
-  m_boatTurnSpeed: 0.15
+  m_boatChaseSpeed: 5
+  m_boatTurnSpeed: 0.5
+  m_boatIdleTimeMax: 6
+  m_occlusionHeight: 0.1
+  m_chaseDetectionRange: 48
+  m_chaseDetectionProjection: 0.7
+  m_assaultRange: 16
+  m_harpoonTime: 2
+  m_vfTurnMagnitude: 1
+  m_vfPushMagnitude: 3
 --- !u!4 &1376595389
 Transform:
   m_ObjectHideFlags: 0

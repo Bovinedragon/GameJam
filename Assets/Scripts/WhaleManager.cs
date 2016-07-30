@@ -32,6 +32,18 @@ public class WhaleManager : MonoBehaviour {
 		return closestSqrMag;
 	}
 
+    public void EnumerateWhalesInRange (Vector3 pos, float radius, out List<GameObject> whales)
+    {
+        whales = new List<GameObject>();
+        float radiusSq = radius * radius;
+        foreach (GameObject whale in m_whaleList)
+        {
+            Vector3 delta = pos - whale.transform.position;
+            if (delta.sqrMagnitude < radiusSq)
+                whales.Add(whale);
+        }
+    }
+
 	void SpawnWhales () {
 		const float minDist = 20.0f;
 		const float minDistSqr = minDist * minDist;

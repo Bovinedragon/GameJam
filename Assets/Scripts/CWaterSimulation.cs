@@ -39,6 +39,9 @@ public class CWaterSimulation : MonoBehaviour {
 
     // Input
     protected Vector2 m_prevMouse;
+
+    // Helper
+    protected bool m_hasObstruction;
     
     // Create wave kernel
     protected void InitializeKernel()
@@ -431,14 +434,10 @@ public class CWaterSimulation : MonoBehaviour {
         float h10 = m_heights[x1 + y0 * c_width];
         float h01 = m_heights[x0 + y1 * c_width];
         float h11 = m_heights[x1 + y1 * c_width];
-
-        // Disabled for now, bit too unstable =/
-        normal = new Vector3(0, 1.0f, 0);
-
-        /*
+        
         // This is a bit iffy, use average of 00-10-11 and 00-11-01 triangle normals
-        float xInc = m_Scale.x * 100.0f / c_width;
-        float yInc = m_Scale.y * 100.0f / c_height;
+        float xInc = m_Scale.x * 400.0f / c_width;
+        float yInc = m_Scale.y * 400.0f / c_height;
         Vector3 v00 = new Vector3(0, h00, 0);
         Vector3 v10 = new Vector3(xInc, h10, 0);
         Vector3 v01 = new Vector3(0.0f, h01, yInc);
@@ -449,9 +448,8 @@ public class CWaterSimulation : MonoBehaviour {
         v10.Normalize();
         v01.Normalize();
         v11.Normalize();
-        normal = Vector3.Cross(v11, v10); // + Vector3.Cross(v11, v01);
+        normal = Vector3.Cross(v11, v10) + Vector3.Cross(v01, v11);
         normal.Normalize();
-        */
 
         // Can just linearly interpolate height
         return Mathf.Lerp( Mathf.Lerp(h00, h10, xFrac), Mathf.Lerp(h01, h11, xFrac), yFrac);
@@ -478,6 +476,8 @@ public class CWaterSimulation : MonoBehaviour {
                 iDst++;
             }
         }
+
+        m_hasObstruction = true;
     }
 
 
@@ -557,6 +557,13 @@ public class CWaterSimulation : MonoBehaviour {
 
         BuildOceanMesh();
         InitializeKernel();
+
+        m_hasObstruction = false;
+    }
+
+    public bool HasObstruction()
+    {
+        return m_hasObstruction;
     }
     
     private void HandleInput()
