@@ -29,8 +29,9 @@ public class Whale : MonoBehaviour {
 	}
 
 	void OnTriggerEnter (Collider other) {
-		if (other.transform.parent != null && other.transform.parent.name == "FishManager") {
-			Destroy(other.gameObject);
+		Fish fish = other.gameObject.GetComponent<Fish>();
+		if (fish != null) {
+			fish.Eat();
 			Heal();
 		}
 	}

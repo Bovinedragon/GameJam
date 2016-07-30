@@ -1133,6 +1133,9 @@ MonoBehaviour:
   m_Fish: {fileID: 168998, guid: 76365c4430379f749a6f4f58c263c9fc, type: 2}
   m_WaterSimulation: {fileID: 26400757}
   m_TerrainBuilder: {fileID: 2123471581}
+  m_MaxFish: 80
+  m_StartSpawnDelay: 2
+  m_SpawnDelay: 0.3
 --- !u!4 &1319741813
 Transform:
   m_ObjectHideFlags: 0
@@ -1514,7 +1517,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Whale: {fileID: 139022, guid: 650a5940a45afa047aaddc2ac451ca3b, type: 2}
   m_TerrainBuilder: {fileID: 2123471581}
-  m_num_whales: 3
+  m_MaxWhales: 3
+  m_StartSpawnDelay: 2
+  m_SpawnDelay: 3
 --- !u!4 &2003776117
 Transform:
   m_ObjectHideFlags: 0
