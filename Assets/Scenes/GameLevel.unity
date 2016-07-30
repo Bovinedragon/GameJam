@@ -1024,7 +1024,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f960649428614034ab0fe9fe5650c80d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_boatModel: {fileID: 100000, guid: c10d468f8b905f54e86ef21afee44950, type: 3}
+  m_boatModel: {fileID: 100006, guid: f65a25cabed1ad0408a726a51a30d2a5, type: 3}
   m_harpoonModel: {fileID: 100000, guid: 513e6b68ed54b1040a93655fe8f5368a, type: 3}
   m_waterSimulation: {fileID: 26400757}
   m_whaleManager: {fileID: 2003776116}
