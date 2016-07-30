@@ -1028,7 +1028,7 @@ MonoBehaviour:
   m_harpoonModel: {fileID: 100000, guid: 513e6b68ed54b1040a93655fe8f5368a, type: 3}
   m_waterSimulation: {fileID: 26400757}
   m_whaleManager: {fileID: 2003776116}
-  m_boatCount: 4
+  m_boatCount: 3
   m_boatIdleSpeed: 5
   m_boatIdleRange: 64
   m_boatChaseSpeed: 5
@@ -1365,6 +1365,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Whale: {fileID: 139022, guid: 650a5940a45afa047aaddc2ac451ca3b, type: 2}
   m_TerrainBuilder: {fileID: 2123471581}
+  m_num_whales: 3
 --- !u!4 &2003776117
 Transform:
   m_ObjectHideFlags: 0
