@@ -7,7 +7,11 @@ public class WhaleManager : MonoBehaviour {
 	public GameObject m_Whale;
 	public TerrainBuilder m_TerrainBuilder;
 
-	public int m_num_whales = 3;
+	public int m_MaxWhales = 3;
+	public float m_StartSpawnDelay = 2.0f;
+	public float m_SpawnDelay = 3.0f;
+
+	private float m_spawnTimer;
 
 	private const int c_whale_y = 1;
 	private const int c_map_width = 180;
@@ -17,7 +21,7 @@ public class WhaleManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+		m_spawnTimer = m_StartSpawnDelay;
 	}
 
 	float ClosestWhaleDistSqr (Vector3 pos) {
@@ -45,33 +49,38 @@ public class WhaleManager : MonoBehaviour {
         }
     }
 
-	void SpawnWhales () {
+	void SpawnWhale () {
 		const float minDist = 40.0f;
 		const float minDistSqr = minDist * minDist;
 
-		if (m_TerrainBuilder == null || !m_TerrainBuilder.HeightDataReady() || m_whaleList.Count >= m_num_whales)
-			return;
-
-		for (int i = 0; i < m_num_whales; ++i) {
-			Vector3 pos;
-			do {
-				pos = new Vector3(
-					Random.Range(-c_map_width / 2, c_map_width / 2), 
-					c_whale_y, 
-					Random.Range(-c_map_height / 2, c_map_height / 2)
-				);
-			}
-			while (m_TerrainBuilder.SampleHeightDataWorld(pos.x, pos.z) > 60 || ClosestWhaleDistSqr(pos) < minDistSqr);
-
-			GameObject whale = GameObject.Instantiate(m_Whale);
-			whale.transform.SetParent(transform);
-			whale.transform.position = pos;
-			m_whaleList.Add(whale);
+		Vector3 pos;
+		do {
+			pos = new Vector3(
+				Random.Range(-c_map_width / 2, c_map_width / 2), 
+				c_whale_y, 
+				Random.Range(-c_map_height / 2, c_map_height / 2)
+			);
 		}
+		while (m_TerrainBuilder.SampleHeightDataWorld(pos.x, pos.z) > 60 || ClosestWhaleDistSqr(pos) < minDistSqr);
+
+		GameObject whale = GameObject.Instantiate(m_Whale);
+		whale.transform.SetParent(transform);
+		whale.transform.position = pos;
+		m_whaleList.Add(whale);
 	}
 
 	// Update is called once per frame
 	void Update () {
-		SpawnWhales();
+		if (m_TerrainBuilder == null || !m_TerrainBuilder.HeightDataReady())
+			return;
+		
+		if (m_whaleList.Count == m_MaxWhales)
+			return;
+		
+		m_spawnTimer -= Time.deltaTime;
+		if (m_spawnTimer <= 0.0f) {
+			SpawnWhale();
+			m_spawnTimer = m_SpawnDelay;
+		}
 	}
 }
