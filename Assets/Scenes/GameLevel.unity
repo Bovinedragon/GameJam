@@ -1363,7 +1363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b26045de72380694ba6fefed8eb6d244, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Whale: {fileID: 139022, guid: 650a5940a45afa047aaddc2ac451ca3b, type: 2}
+  m_Whale: {fileID: 150734, guid: 9d09b0b83c4f44a449b58b51f96fc3b4, type: 2}
   m_TerrainBuilder: {fileID: 2123471581}
   m_num_whales: 3
 --- !u!4 &2003776117
