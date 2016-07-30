@@ -291,8 +291,11 @@ public class CBoatManager : MonoBehaviour {
                         else
                         {
                             boat.m_stateTime -= Time.deltaTime;
-                            if (boat.m_stateTime < 0)
-                                boat.m_stateTime = m_harpoonTime;
+							if (boat.m_stateTime < 0) 
+							{
+								boat.m_targetWhale.GetComponent<Whale>().Damage();
+								boat.m_stateTime = m_harpoonTime;
+							}
                             m_harpoons[i].transform.position = Vector3.Lerp(boat.m_targetWhale.transform.position, boat.m_handle.transform.position, boat.m_stateTime / m_harpoonTime);
 
                             const float c_arcHeight = 8.0f;
