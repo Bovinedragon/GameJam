@@ -49,6 +49,11 @@ public class WhaleManager : MonoBehaviour {
         }
     }
 
+	public void Kill (GameObject whale) {
+		m_whaleList.Remove(whale);
+		DestroyObject(whale);
+	}
+
 	void SpawnWhale () {
 		const float minDist = 40.0f;
 		const float minDistSqr = minDist * minDist;

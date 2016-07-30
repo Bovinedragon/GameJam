@@ -9,8 +9,14 @@ public class Whale : MonoBehaviour {
 	private int m_currentHealth;
 
 	public void Damage () {
-		if (m_currentHealth > 0)
+		if (m_currentHealth > 0) {
 			m_currentHealth--;
+
+			if (m_currentHealth == 0) {
+				WhaleManager manager = GetComponentInParent<WhaleManager>();
+				manager.Kill(this.gameObject);
+			}
+		}
 	}
 
 	public void Heal () {
