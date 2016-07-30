@@ -29,7 +29,13 @@ public class FishManager : MonoBehaviour {
 	private List<FishData> m_fishList = new List<FishData>();
 
 	public void Eat (GameObject fish) {
-		DestroyObject(fish);
+		for (int i = 0; i < m_fishList.Count; ++i) {
+			if (fish == m_fishList[i].m_fish) {
+				m_fishList.RemoveAt(i);				
+				DestroyObject(fish);
+				return;
+			}
+		}
 	}
 
 	void SpawnFish () {
@@ -212,9 +218,6 @@ public class FishManager : MonoBehaviour {
 
 	void Step () {
 		foreach (var fish in m_fishList) {
-			if (fish.m_fish == null)
-				continue;
-
 			fish.m_fish.transform.position += fish.m_velocity * Time.deltaTime;
 			fish.m_fish.transform.LookAt(fish.m_fish.transform.position - fish.m_velocity);
 		}
