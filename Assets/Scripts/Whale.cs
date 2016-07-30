@@ -14,7 +14,7 @@ public class Whale : MonoBehaviour {
 
 			if (m_currentHealth == 0) {
 				WhaleManager manager = GetComponentInParent<WhaleManager>();
-				manager.Kill(this.gameObject);
+				manager.WhaleKilled(this.gameObject);
 			}
 		}
 	}
@@ -25,7 +25,7 @@ public class Whale : MonoBehaviour {
 		
 			if (m_currentHealth == m_MaxHealth) {
 				WhaleManager manager = GetComponentInParent<WhaleManager>();
-				manager.Kill(this.gameObject);
+				manager.WhaleFullyFed(this.gameObject);
 			}
 		}
 	}

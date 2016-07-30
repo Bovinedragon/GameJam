@@ -13,6 +13,9 @@ public class WhaleManager : MonoBehaviour {
 
 	private float m_spawnTimer;
 
+	public int m_WhalesKilled = 0;
+	public int m_WhalesFullyFed = 0;
+
 	private const int c_whale_y = 1;
 	private const int c_map_width = 180;
 	private const int c_map_height = 130;
@@ -48,8 +51,15 @@ public class WhaleManager : MonoBehaviour {
                 whales.Add(whale);
         }
     }
+		
+	public void WhaleKilled (GameObject whale) {
+		m_WhalesKilled++;
+		m_whaleList.Remove(whale);
+		DestroyObject(whale);
+	}
 
-	public void Kill (GameObject whale) {
+	public void WhaleFullyFed (GameObject whale) {
+		m_WhalesFullyFed++;
 		m_whaleList.Remove(whale);
 		DestroyObject(whale);
 	}
