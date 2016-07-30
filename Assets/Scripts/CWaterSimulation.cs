@@ -387,10 +387,74 @@ public class CWaterSimulation : MonoBehaviour {
         int locX, locY;
         locX = (int)((_x + m_Scale.x * 0.5f) * c_width / m_Scale.x);
         locY = (int)((_z + m_Scale.z * 0.5f) * c_height / m_Scale.z);
+        locX = (locX < 0) ? 0 : ((locX >= c_width) ? c_width - 1 : locX);
+        locY = (locY < 0) ? 0 : ((locY >= c_width) ? c_width - 1 : locY);
 
         int iCur = ((locY * c_width) + locX) * 3;
         float len = m_vectorField[iCur];
         return new Vector2(m_vectorField[iCur + 1] * len, m_vectorField[iCur + 2] * len);
+    }
+
+    public float GetObstruction(float _x, float _z)
+    {
+        int locX, locY;
+        locX = (int)((_x + m_Scale.x * 0.5f) * c_width / m_Scale.x);
+        locY = (int)((_z + m_Scale.z * 0.5f) * c_height / m_Scale.z);
+        locX = (locX < 0) ? 0 : ((locX >= c_width) ? c_width - 1 : locX);
+        locY = (locY < 0) ? 0 : ((locY >= c_width) ? c_width - 1 : locY);
+
+        int iCur = (locY * c_width) + locX;
+        return m_obstructions[iCur];
+    }
+
+    public float GetWaterHeightNormal(float _x, float _z, out Vector3 normal)
+    {
+        _x = (_x + m_Scale.x * 0.5f) * c_width / m_Scale.x;
+        _z = (_z + m_Scale.z * 0.5f) * c_height / m_Scale.z;
+
+        int x0 = (int)_x;
+        int y0 = (int)_z;
+        int x1 = x0 + 1;
+        int y1 = y0 + 1;
+        float xFrac = _x - x0;
+        float yFrac = _z - y0;
+        if (x0 < 0)
+            x0 = x1 = 0;
+        else if (x1 >= c_width - 1)
+            x0 = x1 = c_width - 1;
+        if (y0 < 0)
+            y0 = y1 = 0;
+        else if (y1 >= c_height - 1)
+            y0 = y1 = c_height - 1;
+
+        float h00 = m_heights[x0 + y0 * c_width];
+        float h10 = m_heights[x1 + y0 * c_width];
+        float h01 = m_heights[x0 + y1 * c_width];
+        float h11 = m_heights[x1 + y1 * c_width];
+
+        // Disabled for now, bit too unstable =/
+        normal = new Vector3(0, 1.0f, 0);
+
+        /*
+        // This is a bit iffy, use average of 00-10-11 and 00-11-01 triangle normals
+        float xInc = m_Scale.x * 100.0f / c_width;
+        float yInc = m_Scale.y * 100.0f / c_height;
+        Vector3 v00 = new Vector3(0, h00, 0);
+        Vector3 v10 = new Vector3(xInc, h10, 0);
+        Vector3 v01 = new Vector3(0.0f, h01, yInc);
+        Vector3 v11 = new Vector3(xInc, h11, yInc);
+        v10 = v10 - v00;
+        v01 = v01 - v00;
+        v11 = v11 - v00;
+        v10.Normalize();
+        v01.Normalize();
+        v11.Normalize();
+        normal = Vector3.Cross(v11, v10); // + Vector3.Cross(v11, v01);
+        normal.Normalize();
+        */
+
+        // Can just linearly interpolate height
+        return Mathf.Lerp( Mathf.Lerp(h00, h10, xFrac), Mathf.Lerp(h01, h11, xFrac), yFrac);
     }
     
     // Generate height mesh
