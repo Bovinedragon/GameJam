@@ -158,12 +158,23 @@ public class CBoatManager : MonoBehaviour {
                     break;
 
                 case EBoatState.CHASE:
+					if (boat.m_targetWhale == null) {
+						SetBoatIdle(boat);
+						break;
+					}
+
                     boatSpeed = m_boatChaseSpeed;
                     boat.m_targetPoint.x = boat.m_targetWhale.transform.position.x;
                     boat.m_targetPoint.y = boat.m_targetWhale.transform.position.z;
                     break;
 
                 case EBoatState.ASSAULT:
+					if (boat.m_targetWhale == null) {
+						SetBoatIdle(boat);
+						Destroy(m_harpoons[i]);
+						break;
+					}
+
                     boatSpeed = 0.0f;
                     break;
             };

@@ -8,7 +8,13 @@ public class FishManager : MonoBehaviour {
 	public CWaterSimulation m_WaterSimulation;
 	public TerrainBuilder m_TerrainBuilder;
 
-	private const int c_num_fish = 80;
+	public int m_MaxFish = 80;
+
+	public float m_StartSpawnDelay = 2.0f;
+	public float m_SpawnDelay = 0.3f;
+
+	private float m_spawnTimer;
+
 	private const int c_fish_y = 1;
 	private const float c_fish_speed = 5.0f;
 
@@ -22,31 +28,43 @@ public class FishManager : MonoBehaviour {
 
 	private List<FishData> m_fishList = new List<FishData>();
 
+	public void Eat (GameObject fish) {
+		for (int i = 0; i < m_fishList.Count; ++i) {
+			if (fish == m_fishList[i].m_fish) {
+				m_fishList.RemoveAt(i);				
+				DestroyObject(fish);
+				return;
+			}
+		}
+	}
+
+	void SpawnFish () {
+		Vector3 pos = new Vector3(
+			Random.Range(c_fish_bounds.xMin, c_fish_bounds.xMax), 
+			c_fish_y, 
+			Random.Range(c_fish_bounds.yMin, c_fish_bounds.yMax)
+		);
+
+		float angle = Random.Range(0, 2 * Mathf.PI);
+		Vector3 vel = new Vector3(
+			Mathf.Cos(angle) * c_fish_speed,
+			0.0f,
+			Mathf.Sin(angle) * c_fish_speed
+		);
+
+		GameObject fish = GameObject.Instantiate(m_Fish);
+		fish.transform.SetParent(transform);
+		fish.transform.position = pos;
+
+		FishData fishData = new FishData();
+		fishData.m_fish = fish;
+		fishData.m_velocity = vel;
+		m_fishList.Add(fishData);
+	}
+
 	// Use this for initialization
 	void Start () {
-		for (int i = 0; i < c_num_fish; ++i) {
-			Vector3 pos = new Vector3(
-				Random.Range(c_fish_bounds.xMin, c_fish_bounds.xMax), 
-				c_fish_y, 
-				Random.Range(c_fish_bounds.yMin, c_fish_bounds.yMax)
-			);
-
-			float angle = Random.Range(0, 2 * Mathf.PI);
-			Vector3 vel = new Vector3(
-				Mathf.Cos(angle) * c_fish_speed,
-				0.0f,
-				Mathf.Sin(angle) * c_fish_speed
-			);
-
-			GameObject fish = GameObject.Instantiate(m_Fish);
-			fish.transform.SetParent(transform);
-			fish.transform.position = pos;
-
-			FishData fishData = new FishData();
-			fishData.m_fish = fish;
-			fishData.m_velocity = vel;
-			m_fishList.Add(fishData);
-		}
+		m_spawnTimer = m_StartSpawnDelay;
 	}
 
 	Vector3 Cruising (int fish) {
@@ -156,6 +174,17 @@ public class FishManager : MonoBehaviour {
 		return new Vector3(vec.x, 0.0f, vec.y);;
 	}
 
+	void Spawn () {
+		if (m_fishList.Count == m_MaxFish)
+			return;
+
+		m_spawnTimer -= Time.deltaTime;
+		if (m_spawnTimer <= 0.0f) {
+			SpawnFish();
+			m_spawnTimer = m_SpawnDelay;
+		}
+	}
+
 	void Flock () {
 		const float c_cruising_weight = 10.0f;
 		const float c_keep_distance_weight = 4.0f;
@@ -189,9 +218,6 @@ public class FishManager : MonoBehaviour {
 
 	void Step () {
 		foreach (var fish in m_fishList) {
-			if (fish.m_fish == null)
-				continue;
-
 			fish.m_fish.transform.position += fish.m_velocity * Time.deltaTime;
 			fish.m_fish.transform.LookAt(fish.m_fish.transform.position - fish.m_velocity);
 		}
@@ -199,6 +225,7 @@ public class FishManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		Spawn();
 		Flock();
 		Step();
 	}

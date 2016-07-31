@@ -9,13 +9,25 @@ public class Whale : MonoBehaviour {
 	private int m_currentHealth;
 
 	public void Damage () {
-		if (m_currentHealth > 0)
+		if (m_currentHealth > 0) {
 			m_currentHealth--;
+
+			if (m_currentHealth == 0) {
+				WhaleManager manager = GetComponentInParent<WhaleManager>();
+				manager.WhaleKilled(this.gameObject);
+			}
+		}
 	}
 
 	public void Heal () {
-		if (m_currentHealth < m_MaxHealth)
+		if (m_currentHealth < m_MaxHealth) {
 			m_currentHealth++;
+		
+			if (m_currentHealth == m_MaxHealth) {
+				WhaleManager manager = GetComponentInParent<WhaleManager>();
+				manager.WhaleFullyFed(this.gameObject);
+			}
+		}
 	}
 
 	// Use this for initialization
@@ -29,8 +41,9 @@ public class Whale : MonoBehaviour {
 	}
 
 	void OnTriggerEnter (Collider other) {
-		if (other.transform.parent != null && other.transform.parent.name == "FishManager") {
-			Destroy(other.gameObject);
+		Fish fish = other.gameObject.GetComponent<Fish>();
+		if (fish != null) {
+			fish.Eat();
 			Heal();
 		}
 	}

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CWaterSimulation : MonoBehaviour {
 
@@ -36,6 +37,9 @@ public class CWaterSimulation : MonoBehaviour {
     public Material m_OceanMaterial;
     public Camera m_Camera;
     public BoxCollider m_InputCollider;
+    public List<AudioClip> m_SplashSounds;
+    public float m_SplashVolume = 0.5f;
+    public AudioClip m_DragSound;
 
     // Input
     protected Vector2 m_prevMouse;
@@ -565,17 +569,29 @@ public class CWaterSimulation : MonoBehaviour {
     {
         return m_hasObstruction;
     }
-    
+        
     private void HandleInput()
 	{
         if (Input.GetMouseButtonDown(1))
         {
             Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (m_InputCollider.Raycast(ray, out hit, 160.0f))
+            if (m_InputCollider.Raycast(ray, out hit, 200.0f))
             {
                 Vector2 tmp = SampleVectorFieldWorld(hit.point.x, hit.point.z);
                 Debug.Log("Vector field at point " + hit.point.x + ", " + hit.point.z + " is " + tmp.x + ", " + tmp.y);
+            }
+        }
+
+        // splash sounds
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (m_InputCollider.Raycast(ray, out hit, 200.0f))
+            {
+                // splash sounds
+                SoundManager.Get().PlayOneShotRandomSound(m_SplashSounds, m_SplashVolume, hit.point);
             }
         }
 
@@ -584,7 +600,7 @@ public class CWaterSimulation : MonoBehaviour {
             Vector2 mousePos = m_prevMouse;
             Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (m_InputCollider.Raycast(ray, out hit, 160.0f))
+            if (m_InputCollider.Raycast(ray, out hit, 200.0f))
             {
                 Vector3 pos = hit.point + m_Scale * 0.5f;
                 mousePos = new Vector2(pos.x * c_width / m_Scale.x, pos.z * c_height / m_Scale.z);
