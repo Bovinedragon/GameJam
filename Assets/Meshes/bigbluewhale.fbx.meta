@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 12c42f96d30829c49bae0dbf5e1db4a2
-timeCreated: 1469922921
+guid: 9c756f183e32f9e44a5d4ab1ee3e5ed0
+timeCreated: 1469927388
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: pCube1
+    4300000: whalemodel
     9500000: //RootNode
   materials:
     importMaterials: 1
