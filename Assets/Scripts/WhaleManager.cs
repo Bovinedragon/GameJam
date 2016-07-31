@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,6 +16,9 @@ public class WhaleManager : MonoBehaviour {
 
 	public int m_WhalesKilled = 0;
 	public int m_WhalesFullyFed = 0;
+
+	public Text m_DeadText;
+	public Text m_HappyText;
 
 	private const int c_whale_y = 1;
 	private const int c_map_width = 180;
@@ -54,12 +58,14 @@ public class WhaleManager : MonoBehaviour {
 		
 	public void WhaleKilled (GameObject whale) {
 		m_WhalesKilled++;
+		m_DeadText.text = m_WhalesKilled.ToString();
 		m_whaleList.Remove(whale);
 		DestroyObject(whale);
 	}
 
 	public void WhaleFullyFed (GameObject whale) {
 		m_WhalesFullyFed++;
+		m_HappyText.text = m_WhalesFullyFed.ToString();
 		m_whaleList.Remove(whale);
 		DestroyObject(whale);
 	}
