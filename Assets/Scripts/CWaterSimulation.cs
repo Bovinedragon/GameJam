@@ -31,6 +31,7 @@ public class CWaterSimulation : MonoBehaviour {
     // Visual representation
     private Mesh m_mesh;
     private Vector3[] m_vertices;
+    private Color[] m_colors;
 
     // Settings
     public Vector3 m_Scale = Vector3.one;
@@ -356,12 +357,14 @@ public class CWaterSimulation : MonoBehaviour {
                     float Mag = 1.0f - (distSqr / radSqr);
                     m_modifiers[iCur] += Mag * _Magnitude;
 
-                    // Affect vector field - for now, we just assume anything within the wave has full magnitude
+                    // Affect vector field
                     float prevLen = m_vectorField[i * 3];
                     float totalLenRcp = 1.0f / (prevLen + 1.0f);
-                    m_vectorField[iCur * 3 + 1] = (m_vectorField[iCur * 3 + 1] * prevLen + dXf) * totalLenRcp;
-                    m_vectorField[iCur * 3 + 2] = (m_vectorField[iCur * 3 + 2] * prevLen + dYf) * totalLenRcp;
-                    m_vectorField[iCur * 3] = 1.0f;
+                    float xvec = m_vectorField[iCur * 3 + 1];
+                    float yvec = m_vectorField[iCur * 3 + 2];
+                    m_vectorField[iCur * 3 + 1] = Mathf.Lerp(xvec, (xvec * prevLen + dXf) * totalLenRcp, Mag);
+                    m_vectorField[iCur * 3 + 2] = Mathf.Lerp(yvec, (yvec * prevLen + dYf) * totalLenRcp, Mag);
+                    m_vectorField[iCur * 3] = Mathf.Max(m_vectorField[iCur * 3], Mag);
                 }
                 iCur++;
             }
@@ -497,6 +500,7 @@ public class CWaterSimulation : MonoBehaviour {
 
         // build mesh
         m_vertices = new Vector3[(width + 1) * (height + 1)];
+		m_colors = new Color[m_vertices.Length];
         Vector2[] uv = new Vector2[m_vertices.Length];
         Vector4[] tangents = new Vector4[m_vertices.Length];
         Vector4 t = new Vector4(1f, 0f, 0f, -1f);
@@ -512,6 +516,7 @@ public class CWaterSimulation : MonoBehaviour {
                     t = Vector3.Normalize(m_vertices[i] - m_vertices[i - 1]);
                 tangents[i] = new Vector4(t.x, t.y, t.z, -1f);
                 uv[i] = new Vector2((float)x / width, (float)z / height);
+				m_colors[i] = Color.black;
             }
         }
         m_mesh.vertices = m_vertices;
@@ -592,7 +597,13 @@ public class CWaterSimulation : MonoBehaviour {
             {
                 // splash sounds
                 SoundManager.Get().PlayOneShotRandomSound(m_SplashSounds, m_SplashVolume, hit.point);
+                SoundManager.Get().StartWaterDrag(hit.point);
             }
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            SoundManager.Get().StopWaterDrag();
         }
 
         if (Input.GetMouseButton(0))
@@ -604,6 +615,7 @@ public class CWaterSimulation : MonoBehaviour {
             {
                 Vector3 pos = hit.point + m_Scale * 0.5f;
                 mousePos = new Vector2(pos.x * c_width / m_Scale.x, pos.z * c_height / m_Scale.z);
+                SoundManager.Get().UpdateWaterDrag(hit.point);
             }
 
             int prevX = (int)m_prevMouse.x;
@@ -648,9 +660,16 @@ public class CWaterSimulation : MonoBehaviour {
         for (uint i = 0; i <  nVerts; i++)
         {
             m_vertices[i].y = m_heights[i];
+//			m_colors[i].r = m_verticalDerivatives[i];
+//			m_colors[i].r = m_prevHeights[i] - m_heights[i];
+            m_colors[i].r = m_vectorField[i * 3];
+            m_colors[i].g = m_vectorField[i * 3 + 1];
+            m_colors[i].b = m_vectorField[i * 3 + 2];
+            m_colors[i].a = m_prevHeights[i] - m_heights[i];
         }
 
         m_mesh.vertices = m_vertices;
+		m_mesh.colors = m_colors;
         m_mesh.RecalculateNormals();
     }
 }

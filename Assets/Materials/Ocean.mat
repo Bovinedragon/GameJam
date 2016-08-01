@@ -123,6 +123,14 @@ Material:
           m_Texture: {fileID: 843329821, guid: fa7fa312a7fa109478f4e384e106a69b, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _WhiteCapTex
+        second:
+          m_Texture: {fileID: -1543052518, guid: eb796f8ce7e874927b6bbfa84ff2377e,
+            type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
@@ -142,16 +150,20 @@ Material:
         second: 0.078125
       data:
         first:
+          name: _Glossiness
+        second: 0.4
+      data:
+        first:
+          name: _Metallic
+        second: 0.55
+      data:
+        first:
           name: _Parallax
         second: 0.02
       data:
         first:
           name: _ZWrite
         second: 0
-      data:
-        first:
-          name: _Glossiness
-        second: 0.404
       data:
         first:
           name: _BumpScale
@@ -172,10 +184,6 @@ Material:
         first:
           name: _Mode
         second: 3
-      data:
-        first:
-          name: _Metallic
-        second: 0.512
       data:
         first:
           name: _InvFade
@@ -264,6 +272,42 @@ Material:
         first:
           name: _HeightIntensity
         second: 0.77
+      data:
+        first:
+          name: _WhiteCapScrollX
+        second: 1
+      data:
+        first:
+          name: _WhiteCapScrollY
+        second: -1
+      data:
+        first:
+          name: _WhiteCapScaleX
+        second: 4
+      data:
+        first:
+          name: _WhiteCapScaleY
+        second: 8
+      data:
+        first:
+          name: _WhiteCapScroll2X
+        second: 0.5
+      data:
+        first:
+          name: _WhiteCapScroll2Y
+        second: -0.5
+      data:
+        first:
+          name: _WhiteCapScale2X
+        second: 2
+      data:
+        first:
+          name: _WhiteCapScale2Y
+        second: 5
+      data:
+        first:
+          name: _FlowSpeed
+        second: 1
     m_Colors:
       data:
         first:
@@ -272,7 +316,7 @@ Material:
       data:
         first:
           name: _Color
-        second: {r: 0.3317474, g: 0.62138164, b: 0.7647059, a: 1}
+        second: {r: 0.04757785, g: 0.5568248, b: 0.8088235, a: 1}
       data:
         first:
           name: _SpecColor

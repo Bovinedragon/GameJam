@@ -118,7 +118,7 @@ MonoBehaviour:
   c_waveDecaySeconds: 5
   c_waveOffsetIntensity: 0.04
   c_waveRadius: 8
-  m_Scale: {x: 200, y: 0.8, z: 200}
+  m_Scale: {x: 200, y: 1, z: 200}
   m_OceanMaterial: {fileID: 2100000, guid: 75ddabbb0ef12074da2e4a120280cec6, type: 2}
   m_Camera: {fileID: 1640343214}
   m_InputCollider: {fileID: 26400759}
@@ -126,7 +126,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 1e02e1789e5ef2747bc41618430d9f2f, type: 3}
   - {fileID: 8300000, guid: b82bf0ce5cb41164c90a047ed5d4daeb, type: 3}
   - {fileID: 8300000, guid: 92910099e78872e418856f42648a98e4, type: 3}
-  m_SplashVolume: 0.05
+  m_SplashVolume: 0.02
   m_DragSound: {fileID: 8300000, guid: bb788ae3de33d8f408845c18db26d99b, type: 3}
 --- !u!4 &26400758
 Transform:
@@ -1049,6 +1049,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6efc8eabbb710864a82d29e65b2702e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_WaterDragSound: {fileID: 8300000, guid: bb788ae3de33d8f408845c18db26d99b, type: 3}
+  m_WaterDragVolume: 1
+  m_WaterDragFadeInTime: 0.5
+  m_WaterDragFadeOutTime: 1.5
 --- !u!4 &907855821
 Transform:
   m_ObjectHideFlags: 0
@@ -1712,7 +1716,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1640343210}
   m_LocalRotation: {x: 0.7071067, y: 0, z: 0, w: 0.7071069}
-  m_LocalPosition: {x: 0, y: 125, z: 0}
+  m_LocalPosition: {x: 0, y: 127.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_Children: []
