@@ -72,6 +72,17 @@ public class CBoatManager : MonoBehaviour {
 
     }
 
+	public bool BoatInRegion (Vector3 pos, float radius) {
+		float radiusSqr = radius * radius;
+		for (uint i = 0; i < m_boatCount; i++)
+		{
+			Vector3 diff = pos - m_boats[i].m_handle.transform.position;
+			if (diff.sqrMagnitude < radiusSqr)
+				return true;
+		}
+		return false;
+	}
+
     void CreateBoats()
     {
         if (m_waterSimulation == null || !m_waterSimulation.HasObstruction())

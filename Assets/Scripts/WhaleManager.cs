@@ -7,6 +7,7 @@ public class WhaleManager : MonoBehaviour {
 
 	public GameObject m_Whale;
 	public TerrainBuilder m_TerrainBuilder;
+	public CBoatManager m_BoatManager;
     public AudioClip m_WhaleHappySound;
     public AudioClip m_WhaleDeadSound;
     public float m_WhaleVolume = 0.5f;
@@ -80,18 +81,29 @@ public class WhaleManager : MonoBehaviour {
 	}
 
 	void SpawnWhale () {
-		const float minDist = 40.0f;
-		const float minDistSqr = minDist * minDist;
+		const float minWhaleDist = 40.0f;
+		const float minBoatDist = 40.0f;
+		const float minWhaleDistSqr = minWhaleDist * minWhaleDist;
+		int maxTryCount = 30;
+		int tryCount = 0;
 
 		Vector3 pos;
 		do {
+			if (tryCount > maxTryCount)
+				return;
+			
 			pos = new Vector3(
 				Random.Range(-c_map_width / 2, c_map_width / 2), 
 				c_whale_y, 
 				Random.Range(-c_map_height / 2, c_map_height / 2)
 			);
+			tryCount++;
 		}
-		while (m_TerrainBuilder.SampleHeightDataWorld(pos.x, pos.z) > 60 || ClosestWhaleDistSqr(pos) < minDistSqr);
+		while (
+			m_TerrainBuilder.SampleHeightDataWorld(pos.x, pos.z) > 60 
+			|| ClosestWhaleDistSqr(pos) < minWhaleDistSqr
+			|| m_BoatManager.BoatInRegion(pos, minBoatDist)
+		);
 
 		GameObject whale = GameObject.Instantiate(m_Whale);
 		whale.transform.SetParent(transform);
