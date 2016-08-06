@@ -128,7 +128,7 @@ public class Whale : MonoBehaviour {
 				break;
 			case EWhaleState.DEATH:
 				if (m_stateTime < m_DeathTime) {
-					UpdateDeathAnimState(m_stateTime / m_OutroTime);
+				UpdateDeathAnimState(m_stateTime / m_DeathTime);
 				} else {
 					WhaleManager manager = GetComponentInParent<WhaleManager>();
 					manager.WhaleKilled(this.gameObject);
