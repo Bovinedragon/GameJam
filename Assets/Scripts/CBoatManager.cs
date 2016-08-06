@@ -141,6 +141,14 @@ public class CBoatManager : MonoBehaviour {
         boat.m_stateTime = m_boatIdleTimeMax;
         boat.m_state = EBoatState.IDLE;
     }
+
+    protected bool HasBoatLostTarget(CBoat boat, Vector2 boatPos, float range, out Vector2 delta)
+    {
+        Vector2 d = new Vector2(boat.m_targetWhale.transform.position.x - boatPos.x, boat.m_targetWhale.transform.position.z - boatPos.y);
+        float distSq = d.SqrMagnitude();
+        delta = d;
+        return (distSq > range * range * 1.1f || Vector2.Dot(d.normalized, boat.m_moveDirection) < m_chaseDetectionProjection);
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -290,11 +298,10 @@ public class CBoatManager : MonoBehaviour {
 
                 case EBoatState.CHASE:
                     {
-                        Vector2 delta = new Vector2(boat.m_targetWhale.transform.position.x - boatPos.x, boat.m_targetWhale.transform.position.z - boatPos.y);
-                        float distSq = delta.SqrMagnitude();
-                        if (distSq > m_chaseDetectionRange * m_chaseDetectionRange * 1.1f)
+                        Vector2 delta;
+                        if (HasBoatLostTarget(boat, boatPos, m_chaseDetectionRange, out delta))
                             SetBoatIdle(boat);
-                        else if (distSq < m_assaultRange * m_assaultRange)
+                        else if (delta.SqrMagnitude() < m_assaultRange * m_assaultRange)
                         {
                             boat.m_state = EBoatState.ASSAULT;
                             boat.m_stateTime = m_harpoonTime;
@@ -309,9 +316,8 @@ public class CBoatManager : MonoBehaviour {
 
                 case EBoatState.ASSAULT:
                     {
-                        Vector2 delta = new Vector2(boat.m_targetWhale.transform.position.x - boatPos.x, boat.m_targetWhale.transform.position.z - boatPos.y);
-                        float distSq = delta.SqrMagnitude();
-                        if (distSq > m_assaultRange * m_assaultRange * 1.1f)
+                        Vector2 delta;
+                        if (HasBoatLostTarget(boat, boatPos, m_assaultRange, out delta))
                         {
                             SetBoatIdle(boat);
                             Destroy(m_harpoons[i]);
