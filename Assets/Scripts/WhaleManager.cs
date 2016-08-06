@@ -65,6 +65,8 @@ public class WhaleManager : MonoBehaviour {
         SoundManager.Get().PlayOneShotSound(m_WhaleDeadSound, m_WhaleVolume, whale.transform.position);
 		m_whaleList.Remove(whale);
 		DestroyObject(whale);
+        if (GameManager.Get() != null)
+            GameManager.Get().UpdateGameData(m_WhalesFullyFed, m_WhalesKilled);
 	}
 
 	public void WhaleFullyFed (GameObject whale) {
@@ -73,6 +75,8 @@ public class WhaleManager : MonoBehaviour {
         SoundManager.Get().PlayOneShotSound(m_WhaleHappySound, m_WhaleVolume, whale.transform.position);
 		m_whaleList.Remove(whale);
 		DestroyObject(whale);
+        if (GameManager.Get() != null)
+            GameManager.Get().UpdateGameData(m_WhalesFullyFed, m_WhalesKilled);
 	}
 
 	void SpawnWhale () {
