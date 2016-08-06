@@ -116,7 +116,7 @@ MonoBehaviour:
   c_minObstruction: 104
   c_maxObstruction: 128
   c_waveDecaySeconds: 5
-  c_waveOffsetIntensity: 0.04
+  c_waveOffsetIntensity: 0.1
   c_waveRadius: 8
   m_Scale: {x: 200, y: 1, z: 200}
   m_OceanMaterial: {fileID: 2100000, guid: 75ddabbb0ef12074da2e4a120280cec6, type: 2}
