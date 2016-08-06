@@ -88,6 +88,10 @@ public class WhaleManager : MonoBehaviour {
 		int tryCount = 0;
 
 		Vector3 pos;
+		Vector3 posRight;
+		Vector3 posLeft;
+		Vector3 posUp;
+		Vector3 posDown;
 		do {
 			if (tryCount > maxTryCount)
 				return;
@@ -98,9 +102,18 @@ public class WhaleManager : MonoBehaviour {
 				Random.Range(-c_map_height / 2, c_map_height / 2)
 			);
 			tryCount++;
+
+			posRight = pos + new Vector3(10.0f, 0.0f, 0.0f);
+			posLeft = pos + new Vector3(-4.0f, 0.0f, 0.0f);
+			posUp = pos + new Vector3(0.0f, 0.0f, 5.0f);
+			posDown = pos + new Vector3(0.0f, 0.0f, -5.0f);
 		}
 		while (
 			m_TerrainBuilder.SampleHeightDataWorld(pos.x, pos.z) > 60 
+			|| m_TerrainBuilder.SampleHeightDataWorld(posRight.x, posRight.z) > 60 
+			|| m_TerrainBuilder.SampleHeightDataWorld(posLeft.x, posLeft.z) > 60 
+			|| m_TerrainBuilder.SampleHeightDataWorld(posUp.x, posUp.z) > 60 
+			|| m_TerrainBuilder.SampleHeightDataWorld(posDown.x, posDown.z) > 60 
 			|| ClosestWhaleDistSqr(pos) < minWhaleDistSqr
 			|| m_BoatManager.BoatInRegion(pos, minBoatDist)
 		);
