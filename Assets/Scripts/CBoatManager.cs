@@ -16,6 +16,8 @@ public class CBoatManager : MonoBehaviour {
 
     public uint m_boatCount = 4;
 
+    public float m_boatRenderHeight = 1.0f;
+
     public float m_boatIdleSpeed = 3.0f; // Boat speed in IDLE state
     public float m_boatIdleRange = 64.0f; // Boat max search range in IDLE mode
     public float m_boatChaseSpeed = 5.0f; // Boat speed in CHASE state
@@ -26,6 +28,7 @@ public class CBoatManager : MonoBehaviour {
     public float m_chaseDetectionProjection = 0.7f;
     public float m_assaultRange = 16.0f;
     public float m_harpoonTime = 2.0f;
+    public Vector3 m_whaleTargetOffset = new Vector3(7.0f, 0, 0);
 
     public float m_vfTurnMagnitude = 1.0f;
     public float m_vfPushMagnitude = 3.0f;
@@ -255,7 +258,7 @@ public class CBoatManager : MonoBehaviour {
                 float height = m_waterSimulation.GetWaterHeightNormal(boatPos.x, boatPos.y, out normal);
 
                 // Update position
-                boat.m_handle.transform.position = new Vector3(boatPos.x, height, boatPos.y);
+                boat.m_handle.transform.position = new Vector3(boatPos.x, height + m_boatRenderHeight, boatPos.y);
 
                 // Update orientation (yeah, it's a bit iffy with axes, broken model =P)
                 Vector3 forward = new Vector3(boat.m_moveDirection.x, 0, boat.m_moveDirection.y);
@@ -324,6 +327,8 @@ public class CBoatManager : MonoBehaviour {
                         }
                         else
                         {
+                            delta.x += m_whaleTargetOffset.x;
+                            delta.y += m_whaleTargetOffset.z;
                             boat.m_stateTime -= Time.deltaTime;
 							if (boat.m_stateTime < 0) 
 							{
@@ -331,7 +336,7 @@ public class CBoatManager : MonoBehaviour {
 								boat.m_stateTime = m_harpoonTime;
                                 SoundManager.Get().PlayOneShotRandomSound(m_harpoonSounds, m_harpoonVolume, m_harpoons[i].transform.position);
 							}
-                            m_harpoons[i].transform.position = Vector3.Lerp(boat.m_targetWhale.transform.position, boat.m_handle.transform.position, boat.m_stateTime / m_harpoonTime);
+                            m_harpoons[i].transform.position = Vector3.Lerp(boat.m_targetWhale.transform.position + m_whaleTargetOffset, boat.m_handle.transform.position, boat.m_stateTime / m_harpoonTime);
 
                             const float c_arcHeight = 8.0f;
                             float halfTime = m_harpoonTime * 0.5f;
