@@ -6,6 +6,10 @@ public class Whale : MonoBehaviour {
 	public int m_StartHealth = 15;
 	public int m_MaxHealth = 30;
 
+	public AudioClip m_WhaleHappySound;
+	public AudioClip m_WhaleDeadSound;
+	public float m_WhaleVolume = 0.5f;
+
 	public Vector3 m_SpawnLocation;
 	private int m_currentHealth;
 
@@ -26,6 +30,7 @@ public class Whale : MonoBehaviour {
 			if (m_currentHealth == 0) {
 				m_state = EWhaleState.DEATH;
 				m_stateTime = 0;
+				SoundManager.Get().PlayOneShotSound(m_WhaleDeadSound, m_WhaleVolume, transform.position);
 			}
 		}
 	}
@@ -37,6 +42,7 @@ public class Whale : MonoBehaviour {
 			if (m_currentHealth == m_MaxHealth) {
 				m_state = EWhaleState.OUTRO;
 				m_stateTime = 0;
+				SoundManager.Get().PlayOneShotSound(m_WhaleHappySound, m_WhaleVolume, transform.position);
 			}
 		}
 	}

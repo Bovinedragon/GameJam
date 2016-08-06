@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: 795186facf5a9894184c22b079106e69
-timeCreated: 1468711274
+timeCreated: 1470521271
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - m_WhaleHappySound: {fileID: 8300000, guid: efaf60c0340373544abaf24835259bc7, type: 3}
+  - m_WhaleDeadSound: {fileID: 8300000, guid: 282b3d5928c9fae4db403f93bc47e5be, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

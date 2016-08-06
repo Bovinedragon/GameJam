@@ -15,7 +15,7 @@ public class FishManager : MonoBehaviour {
 
 	private float m_spawnTimer;
 
-	private const int c_fish_y = 1;
+	private const float c_fish_y = 1.0f;
 	private const float c_fish_speed = 5.0f;
 
 	//private Rect c_map_bounds = new Rect(-100.0f, -100.0f, 200.0f, 200.0f);

@@ -8,9 +8,6 @@ public class WhaleManager : MonoBehaviour {
 	public GameObject m_Whale;
 	public TerrainBuilder m_TerrainBuilder;
 	public CBoatManager m_BoatManager;
-    public AudioClip m_WhaleHappySound;
-    public AudioClip m_WhaleDeadSound;
-    public float m_WhaleVolume = 0.5f;
 
 	public int m_MaxWhales = 3;
 	public float m_StartSpawnDelay = 2.0f;
@@ -24,7 +21,7 @@ public class WhaleManager : MonoBehaviour {
 	public Text m_DeadText;
 	public Text m_HappyText;
 
-	private const int c_whale_y = 1;
+	private const float c_whale_y = 1.0f;
 	private const int c_map_width = 180;
 	private const int c_map_height = 130;
 
@@ -63,7 +60,6 @@ public class WhaleManager : MonoBehaviour {
 	public void WhaleKilled (GameObject whale) {
 		m_WhalesKilled++;
 		m_DeadText.text = m_WhalesKilled.ToString();
-        SoundManager.Get().PlayOneShotSound(m_WhaleDeadSound, m_WhaleVolume, whale.transform.position);
 		m_whaleList.Remove(whale);
 		DestroyObject(whale);
         if (GameManager.Get() != null)
@@ -73,7 +69,6 @@ public class WhaleManager : MonoBehaviour {
 	public void WhaleFullyFed (GameObject whale) {
 		m_WhalesFullyFed++;
 		m_HappyText.text = m_WhalesFullyFed.ToString();
-        SoundManager.Get().PlayOneShotSound(m_WhaleHappySound, m_WhaleVolume, whale.transform.position);
 		m_whaleList.Remove(whale);
 		DestroyObject(whale);
         if (GameManager.Get() != null)
