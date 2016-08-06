@@ -1,15 +1,23 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\CBoatManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Whale.cs">
     <Files>
-      <File FileName="Assets\Scripts\WhaleManager.cs" Line="10" Column="36" />
+      <File FileName="Assets\Scripts\WhaleManager.cs" Line="13" Column="32" />
+      <File FileName="Assets\Scripts\Whale.cs" Line="51" Column="35" />
       <File FileName="Assets\Scripts\TerrainBuilder.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\CWaterSimulation.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\FishManager.cs" Line="136" Column="3" />
-      <File FileName="Assets\Scripts\Whale.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\FishManager.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\OptionsMenu.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CBoatManager.cs" Line="64" Column="1" />
+      <File FileName="Assets\Scripts\CBoatManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GameManager.cs" Line="1" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State>
+          <Value>transform.up</Value>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
