@@ -12,7 +12,8 @@ public class Whale : MonoBehaviour {
 	protected enum EWhaleState {
 		INTRO,
 		IDLE,
-		OUTRO
+		OUTRO,
+		DEATH
 	};
 
 	private EWhaleState m_state;
@@ -23,8 +24,8 @@ public class Whale : MonoBehaviour {
 			m_currentHealth--;
 
 			if (m_currentHealth == 0) {
-				WhaleManager manager = GetComponentInParent<WhaleManager>();
-				manager.WhaleKilled(this.gameObject);
+				m_state = EWhaleState.DEATH;
+				m_stateTime = 0;
 			}
 		}
 	}
@@ -42,6 +43,7 @@ public class Whale : MonoBehaviour {
 
 	private float m_IntroTime = 2.5f;
 	private float m_OutroTime = 1.5f;
+	private float m_DeathTime = 0.5f;
 
 	private float m_AnimXDist = 8.0f;
 	//private float m_AnimZDist = 5.0f;
@@ -66,14 +68,34 @@ public class Whale : MonoBehaviour {
 		
 	void UpdateOutroAnimState (float alpha) {
 		//float curvedAlpha = 1.0f - Mathf.Cos(alpha * Mathf.PI / 2.0f);
-		float curvedAlpha = alpha;
-		//float curvedAlpha = Mathf.Sin(alpha * Mathf.PI / 2.0f);
+		//float curvedAlpha = alpha;
+		float curvedAlpha = Mathf.Sin(alpha * Mathf.PI / 2.0f);
 		GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f - curvedAlpha);
 
 		Vector3 pos = transform.position;
 		pos.x = m_SpawnLocation.x + m_AnimXDist * curvedAlpha;
 		//pos.y = m_SpawnLocation.y + m_AnimZDist * curvedAlpha;
 		transform.position = pos;
+
+		//Quaternion rot = transform.rotation;
+		//rot.R
+		//pos.y = m_SpawnLocation.y + m_AnimZDist * curvedAlpha;
+		//transform.rotation = rot;
+
+		//Vector3 lookAt = pos + new Vector3(1.0f, -m_AnimLookUpFactor * curvedAlpha * 0.8f, 0.0f);
+		//transform.LookAt(lookAt);
+	}
+
+	void UpdateDeathAnimState (float alpha) {
+		//float curvedAlpha = 1.0f - Mathf.Cos(alpha * Mathf.PI / 2.0f);
+		float curvedAlpha = alpha;
+		//float curvedAlpha = Mathf.Sin(alpha * Mathf.PI / 2.0f);
+		GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f - curvedAlpha);
+
+		//Vector3 pos = transform.position;
+		//pos.x = m_SpawnLocation.x + m_AnimXDist * curvedAlpha;
+		//pos.y = m_SpawnLocation.y + m_AnimZDist * curvedAlpha;
+		//transform.position = pos;
 
 		//Vector3 lookAt = pos + new Vector3(1.0f, -m_AnimLookUpFactor * curvedAlpha * 0.8f, 0.0f);
 		//transform.LookAt(lookAt);
@@ -96,6 +118,14 @@ public class Whale : MonoBehaviour {
 				} else {
 					WhaleManager manager = GetComponentInParent<WhaleManager>();
 					manager.WhaleFullyFed(this.gameObject);
+				}
+				break;
+			case EWhaleState.DEATH:
+				if (m_stateTime < m_DeathTime) {
+					UpdateDeathAnimState(m_stateTime / m_OutroTime);
+				} else {
+					WhaleManager manager = GetComponentInParent<WhaleManager>();
+					manager.WhaleKilled(this.gameObject);
 				}
 				break;
 		}
