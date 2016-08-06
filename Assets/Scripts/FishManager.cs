@@ -39,11 +39,15 @@ public class FishManager : MonoBehaviour {
 	}
 
 	void SpawnFish () {
-		Vector3 pos = new Vector3(
-			Random.Range(c_fish_bounds.xMin, c_fish_bounds.xMax), 
-			c_fish_y, 
-			Random.Range(c_fish_bounds.yMin, c_fish_bounds.yMax)
-		);
+		Vector3 pos;
+		do {
+			pos = new Vector3(
+				Random.Range(c_fish_bounds.xMin, c_fish_bounds.xMax), 
+				c_fish_y, 
+				Random.Range(c_fish_bounds.yMin, c_fish_bounds.yMax)
+			);
+		}
+		while (m_TerrainBuilder.SampleHeightDataWorld(pos.x, pos.z) > 110);
 
 		float angle = Random.Range(0, 2 * Mathf.PI);
 		Vector3 vel = new Vector3(
@@ -175,7 +179,7 @@ public class FishManager : MonoBehaviour {
 	}
 
 	void Spawn () {
-		if (m_fishList.Count == m_MaxFish)
+		if (m_fishList.Count == m_MaxFish || m_TerrainBuilder == null)
 			return;
 
 		m_spawnTimer -= Time.deltaTime;
