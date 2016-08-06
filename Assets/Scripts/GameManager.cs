@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public int m_FeedWinCount = 15;
     public int m_DeadLoseCount = 3;
+    public GameObject m_IntoRoot;
     public Canvas m_WinCanvas;
     public Canvas m_LoseCanvas;
 	public GameObject m_MainCamera;
@@ -37,6 +38,7 @@ public class GameManager : MonoBehaviour
 	{
 		Application.targetFrameRate = 30;
 		m_LoadingProgressText.gameObject.SetActive(false);
+		m_IntoRoot.SetActive(true);
 	}
 
 	void Update()
@@ -81,6 +83,7 @@ public class GameManager : MonoBehaviour
         Scene gameLevelScene = SceneManager.GetSceneAt(1);
         SceneManager.SetActiveScene(gameLevelScene);
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
+		m_IntoRoot.SetActive(false);
 	}
 
 	public void MainMenu()
@@ -100,6 +103,7 @@ public class GameManager : MonoBehaviour
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
         m_WinCanvas.gameObject.SetActive(false);
         m_LoseCanvas.gameObject.SetActive(false);
+		m_IntoRoot.SetActive(true);
 	}
 
     private void Win()
