@@ -2041,6 +2041,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Whale: {fileID: 150734, guid: 9d09b0b83c4f44a449b58b51f96fc3b4, type: 2}
   m_TerrainBuilder: {fileID: 2123471581}
+  m_BoatManager: {fileID: 1376595388}
   m_WhaleHappySound: {fileID: 8300000, guid: efaf60c0340373544abaf24835259bc7, type: 3}
   m_WhaleDeadSound: {fileID: 8300000, guid: 282b3d5928c9fae4db403f93bc47e5be, type: 3}
   m_WhaleVolume: 0.07
