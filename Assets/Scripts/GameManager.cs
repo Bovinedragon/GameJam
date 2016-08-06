@@ -10,11 +10,14 @@ public class GameManager : MonoBehaviour
 	public GameObject m_LoadingProgressTextGO;
 	public GameObject m_StartGameButtonGO;
 	public Text m_LoadingProgressText;
+    public Cubemap m_MainMenuCubemap;
+    public Cubemap m_GameLevelCubmap;
+
 	private AsyncOperation m_asyncSceneLoad;
+	
+    static private GameManager s_instance;
 
-	static private GameManager s_instance;
-
-	static public GameManager Get()
+    static public GameManager Get()
 	{
 		return s_instance;
 	}
@@ -55,6 +58,9 @@ public class GameManager : MonoBehaviour
 	public void StartGame()
 	{
 		m_asyncSceneLoad = SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
+        Scene gameLevelScene = SceneManager.GetSceneAt(1);
+        SceneManager.SetActiveScene(gameLevelScene);
+        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
 	}
 
 	public void MainMenu()
@@ -63,5 +69,8 @@ public class GameManager : MonoBehaviour
 		m_MainCamera.SetActive(true);
         m_MainDirectionalLight.SetActive(true);
 		m_StartGameButtonGO.SetActive(true);
+        Scene mainScene = SceneManager.GetSceneAt(0);
+        SceneManager.SetActiveScene(mainScene);
+        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
 	}
 }

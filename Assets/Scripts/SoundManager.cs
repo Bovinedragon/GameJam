@@ -32,6 +32,7 @@ public class SoundManager : MonoBehaviour
         m_WaterDragAudioSource.volume = 0f;
         m_WaterDragAudioSource.loop = true;
         m_WaterDragAudioSource.clip = m_WaterDragSound;
+        m_WaterDragGameObject.transform.parent = this.transform;
         m_WaterDragGameObject.transform.localPosition = Vector3.zero;
     }
 
@@ -88,6 +89,8 @@ public class SoundManager : MonoBehaviour
         source.clip = clip;
         if (parent)
             go.transform.parent = parent;
+        else
+            go.transform.parent = this.transform;
         go.transform.localPosition = position;
         source.Play();
 

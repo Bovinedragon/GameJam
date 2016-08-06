@@ -9,6 +9,10 @@ public class CBoatManager : MonoBehaviour {
     public GameObject m_harpoonModel;
     public CWaterSimulation m_waterSimulation;
     public WhaleManager m_whaleManager;
+    public List<AudioClip> m_harpoonSounds;
+    public float m_harpoonVolume = 0.1f;
+    public AudioClip m_boatSound;
+    public float m_boatVolume = 0.1f;
 
     public uint m_boatCount = 4;
 
@@ -267,6 +271,7 @@ public class CBoatManager : MonoBehaviour {
                             {
                                 boat.m_state = EBoatState.CHASE;
                                 boat.m_targetWhale = whale;
+                                SoundManager.Get().PlayOneShotSound(m_boatSound, m_boatVolume, boat.m_handle.transform.position);
                             }
                         }
                     }
@@ -286,6 +291,7 @@ public class CBoatManager : MonoBehaviour {
                             m_harpoons[i].transform.SetParent(transform);
                             m_harpoons[i].transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
                             m_harpoons[i].transform.position = new Vector3(boatPos.x, 0.0f, boatPos.y);
+                            SoundManager.Get().PlayOneShotRandomSound(m_harpoonSounds, m_harpoonVolume, m_harpoons[i].transform.position);
                         }
                     }
                     break;
@@ -306,6 +312,7 @@ public class CBoatManager : MonoBehaviour {
 							{
 								boat.m_targetWhale.GetComponent<Whale>().Damage();
 								boat.m_stateTime = m_harpoonTime;
+                                SoundManager.Get().PlayOneShotRandomSound(m_harpoonSounds, m_harpoonVolume, m_harpoons[i].transform.position);
 							}
                             m_harpoons[i].transform.position = Vector3.Lerp(boat.m_targetWhale.transform.position, boat.m_handle.transform.position, boat.m_stateTime / m_harpoonTime);
 

@@ -1,0 +1,326 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: OceanMainMenu
+  m_Shader: {fileID: 4800000, guid: 76ae9da3334d2460c894d1c273d79ca8, type: 3}
+  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap:
+    RenderType: Transparent
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _DetailNormalMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _ParallaxMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _OcclusionMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _EmissionMap
+        second:
+          m_Texture: {fileID: -1484049936, guid: f94a4bc2b347c4e3f9feab8119d437c8,
+            type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _DetailMask
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _DetailAlbedoMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _MetallicGlossMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _SpecGlossMap
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _NormalMapA
+        second:
+          m_Texture: {fileID: 188975762, guid: fa7fa312a7fa109478f4e384e106a69b, type: 3}
+          m_Scale: {x: 0, y: 0}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _NormalMapB
+        second:
+          m_Texture: {fileID: 188975762, guid: fa7fa312a7fa109478f4e384e106a69b, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _GradientTex
+        second:
+          m_Texture: {fileID: 843329821, guid: fa7fa312a7fa109478f4e384e106a69b, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _HeightMapA
+        second:
+          m_Texture: {fileID: 843329821, guid: fa7fa312a7fa109478f4e384e106a69b, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _HeightMapB
+        second:
+          m_Texture: {fileID: 843329821, guid: fa7fa312a7fa109478f4e384e106a69b, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _WhiteCapTex
+        second:
+          m_Texture: {fileID: -1543052518, guid: eb796f8ce7e874927b6bbfa84ff2377e,
+            type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _SrcBlend
+        second: 1
+      data:
+        first:
+          name: _DstBlend
+        second: 10
+      data:
+        first:
+          name: _Cutoff
+        second: 0.5
+      data:
+        first:
+          name: _Shininess
+        second: 0.078125
+      data:
+        first:
+          name: _Glossiness
+        second: 0.4
+      data:
+        first:
+          name: _Metallic
+        second: 0.55
+      data:
+        first:
+          name: _Parallax
+        second: 0.02
+      data:
+        first:
+          name: _ZWrite
+        second: 0
+      data:
+        first:
+          name: _BumpScale
+        second: 1
+      data:
+        first:
+          name: _OcclusionStrength
+        second: 1
+      data:
+        first:
+          name: _DetailNormalMapScale
+        second: 1
+      data:
+        first:
+          name: _UVSec
+        second: 0
+      data:
+        first:
+          name: _Mode
+        second: 3
+      data:
+        first:
+          name: _InvFade
+        second: 1
+      data:
+        first:
+          name: _NormalScrollX
+        second: 2
+      data:
+        first:
+          name: _NormalScrollY
+        second: 0.2
+      data:
+        first:
+          name: _NormalScaleX
+        second: 1.08
+      data:
+        first:
+          name: _NormalScaleY
+        second: 6.1
+      data:
+        first:
+          name: _NormalAScrollX
+        second: 2
+      data:
+        first:
+          name: _NormalAScrollY
+        second: 0.03
+      data:
+        first:
+          name: _NormalAScaleX
+        second: 6
+      data:
+        first:
+          name: _NormalAScaleY
+        second: 6
+      data:
+        first:
+          name: _NormalBScrollX
+        second: -2.5
+      data:
+        first:
+          name: _NormalBScrollY
+        second: 0.07
+      data:
+        first:
+          name: _NormalBScaleX
+        second: 5
+      data:
+        first:
+          name: _NormalBScaleY
+        second: 5
+      data:
+        first:
+          name: _HeightAScrollX
+        second: 3
+      data:
+        first:
+          name: _HeightAScrollY
+        second: -0.08
+      data:
+        first:
+          name: _HeightAScaleX
+        second: 10
+      data:
+        first:
+          name: _HeightAScaleY
+        second: 20
+      data:
+        first:
+          name: _HeightBScrollX
+        second: 0.5
+      data:
+        first:
+          name: _HeightBScrollY
+        second: -0.1
+      data:
+        first:
+          name: _HeightBScaleX
+        second: 7
+      data:
+        first:
+          name: _HeightBScaleY
+        second: 8
+      data:
+        first:
+          name: _HeightIntensity
+        second: 0.77
+      data:
+        first:
+          name: _WhiteCapScrollX
+        second: 0.5
+      data:
+        first:
+          name: _WhiteCapScrollY
+        second: -0.5
+      data:
+        first:
+          name: _WhiteCapScaleX
+        second: 4
+      data:
+        first:
+          name: _WhiteCapScaleY
+        second: 8
+      data:
+        first:
+          name: _WhiteCapScroll2X
+        second: 0.3
+      data:
+        first:
+          name: _WhiteCapScroll2Y
+        second: -0.3
+      data:
+        first:
+          name: _WhiteCapScale2X
+        second: 2
+      data:
+        first:
+          name: _WhiteCapScale2Y
+        second: 5
+      data:
+        first:
+          name: _FlowSpeed
+        second: 1
+    m_Colors:
+      data:
+        first:
+          name: _EmissionColor
+        second: {r: 0, g: 0, b: 0, a: 1}
+      data:
+        first:
+          name: _Color
+        second: {r: 0.0625, g: 0.25587496, b: 0.5, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+      data:
+        first:
+          name: _TintColor
+        second: {r: 0.416, g: 0.416, b: 0.416, a: 0.503}
