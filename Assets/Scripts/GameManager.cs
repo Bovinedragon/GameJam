@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject m_MainDirectionalLight;
 	public GameObject m_LoadingProgressTextGO;
 	public GameObject m_StartGameButtonGO;
+	public GameObject m_QuitGameButton;
 	public Text m_LoadingProgressText;
     public Cubemap m_MainMenuCubemap;
     public Cubemap m_GameLevelCubmap;
@@ -68,6 +69,11 @@ public class GameManager : MonoBehaviour
             Lose();
     }
 
+	public void QuitGame()
+	{
+		Application.Quit();
+	}
+
 	public void StartGame()
 	{
         Time.timeScale = 1f;
@@ -88,6 +94,7 @@ public class GameManager : MonoBehaviour
 		m_MainCamera.SetActive(true);
         m_MainDirectionalLight.SetActive(true);
 		m_StartGameButtonGO.SetActive(true);
+		m_QuitGameButton.SetActive(true);
         Scene mainScene = SceneManager.GetSceneAt(0);
         SceneManager.SetActiveScene(mainScene);
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
