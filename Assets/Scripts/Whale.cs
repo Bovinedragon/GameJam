@@ -189,7 +189,7 @@ public class Whale : MonoBehaviour {
 
 	void OnTriggerEnter (Collider other) {
 		Fish fish = other.gameObject.GetComponent<Fish>();
-		if (fish != null && m_state == EWhaleState.IDLE) {
+		if (fish != null && fish.CanEat() && m_state == EWhaleState.IDLE) {
 			fish.Eat();
 			Heal();
             // SetEffect(EEffectType.EAT);
