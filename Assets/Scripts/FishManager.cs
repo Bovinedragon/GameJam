@@ -28,16 +28,6 @@ public class FishManager : MonoBehaviour {
 
 	private List<FishData> m_fishList = new List<FishData>();
 
-	public void Eat (GameObject fish) {
-		for (int i = 0; i < m_fishList.Count; ++i) {
-			if (fish == m_fishList[i].m_fish) {
-				m_fishList.RemoveAt(i);				
-				DestroyObject(fish);
-				return;
-			}
-		}
-	}
-
 	void SpawnFish () {
 		Vector3 pos;
 		do {
@@ -221,10 +211,27 @@ public class FishManager : MonoBehaviour {
 	}
 
 	void Step () {
+        bool removeAny = false;
 		foreach (var fish in m_fishList) {
 			fish.m_fish.transform.position += fish.m_velocity * Time.deltaTime;
 			fish.m_fish.transform.LookAt(fish.m_fish.transform.position - fish.m_velocity);
+
+            if (fish.m_fish.transform.localScale.x <= 0.0f)
+                removeAny = true;
 		}
+
+        if (!removeAny)
+            return;
+
+        for (int i = 0; i < m_fishList.Count; i++)
+        {
+            if (m_fishList[i].m_fish.transform.localScale.x <= 0.0f)
+            {
+                DestroyObject(m_fishList[i].m_fish);
+                m_fishList.RemoveAt(i);
+                i--;
+            }
+        }
 	}
 
 	// Update is called once per frame

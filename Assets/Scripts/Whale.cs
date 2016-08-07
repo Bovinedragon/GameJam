@@ -9,6 +9,7 @@ public class Whale : MonoBehaviour {
 	public AudioClip m_WhaleHappySound;
 	public AudioClip m_WhaleDeadSound;
 	public float m_WhaleVolume = 0.5f;
+    public float m_EffectTimeMax = 0.4f;
 
 	public Vector3 m_SpawnLocation;
 	private int m_currentHealth;
@@ -20,8 +21,22 @@ public class Whale : MonoBehaviour {
 		DEATH
 	};
 
+    protected enum EEffectType
+    {
+        EAT,
+        DAMAGE,
+    };
+
 	private EWhaleState m_state;
+    private EEffectType m_effectType;
 	private float m_stateTime = 0.0f;
+    private float m_effectTime = 0.0f;
+
+    protected void SetEffect (EEffectType type)
+    {
+        m_effectType = type;
+        m_effectTime = m_EffectTimeMax;
+    }
 
 	public void Damage () {
 		if (m_currentHealth > 0) {
@@ -32,6 +47,10 @@ public class Whale : MonoBehaviour {
 				m_stateTime = 0;
 				SoundManager.Get().PlayOneShotSound(m_WhaleDeadSound, m_WhaleVolume, transform.position);
 			}
+            else
+            {
+                SetEffect(EEffectType.DAMAGE);
+            }
 		}
 	}
 
@@ -135,7 +154,22 @@ public class Whale : MonoBehaviour {
 				}
 				break;
 		}
-	}
+
+        if (m_effectTime > 0.0f)
+        {
+            Color clr = GetComponent<Renderer>().material.color;
+            Color newClr;
+            if (m_effectType == EEffectType.DAMAGE)
+                newClr = new Color(2.0f, 0.3f, 0.3f, clr.a);
+            else if (m_effectType == EEffectType.EAT)
+                newClr = new Color(0.2f, 1.0f, 0.0f, clr.a);
+            else
+                newClr = new Color(1.0f, 1.0f, 1.0f, clr.a);
+
+            m_effectTime -= Time.deltaTime;
+            GetComponent<Renderer>().material.color = Color.Lerp(new Color(1.0f, 1.0f, 1.0f, clr.a), newClr, Mathf.Max(m_effectTime / m_EffectTimeMax, 0.0f));
+        }
+  }
 
 	// Use this for initialization
 	void Start () {
@@ -143,6 +177,7 @@ public class Whale : MonoBehaviour {
 
 		m_state = EWhaleState.INTRO;
 		m_stateTime = 0;
+        m_effectTime = 0;
 		UpdateState();
 	}
 	
@@ -154,9 +189,10 @@ public class Whale : MonoBehaviour {
 
 	void OnTriggerEnter (Collider other) {
 		Fish fish = other.gameObject.GetComponent<Fish>();
-		if (fish != null && m_state == EWhaleState.IDLE) {
+		if (fish != null && fish.CanEat() && m_state == EWhaleState.IDLE) {
 			fish.Eat();
 			Heal();
+            // SetEffect(EEffectType.EAT);
 		}
 	}
 		
